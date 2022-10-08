@@ -14,7 +14,7 @@ const SignUp = () => {
     id: "",
     pw: "",
   });
-  const [passwordCheck] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
 
   const pwRef = useRef();
   const pwCheckRef = useRef();
@@ -40,7 +40,7 @@ const SignUp = () => {
               style={styles.input}
               onChangeText={(input) => setUserInfo({ ...userInfo, id: input })}
               value={userInfo.id}
-              autoFocus={true}
+              //autoFocus={true} 이거 나중에 키자 정신 없다.
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 pwRef.current.focus();
@@ -71,7 +71,7 @@ const SignUp = () => {
             <Text style={styles.inputText}>패스워드 확인</Text>
             <TextInput
               style={styles.input}
-              onChangeText={console.log(pwRegEx.test(userInfo.pw))}
+              onChangeText={setPasswordCheck}
               value={passwordCheck}
               ref={pwCheckRef}
               blurOnSubmit={false}
@@ -97,6 +97,8 @@ const SignUp = () => {
 
 export default SignUp;
 
+//사실 스타일 컴포넌트 쓰면 스타일 코드가 더 이쁠지도 모르겠다는 생각이 들긴 하는데, 그냥 진행
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -109,7 +111,6 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1.1,
-    //backgroundColor: "orange",
   },
   inputBox: {
     flex: 0.7,
@@ -123,24 +124,23 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   titleText: {
-    fontWeight: "800",
+    fontFamily: "Tmoney",
     fontSize: 20,
     lineHeight: 26,
     marginBottom: "19%",
     color: "#0974fa",
   },
   inputText: {
-    fontWeight: "800",
     fontSize: 15,
     lineHeight: 20,
     color: "#0974fa",
+    fontFamily: "Tmoney",
   },
   alertText: {
-    fontWeight: "400",
     fontSize: 10,
-    lineHeight: 16,
     color: "#0974fa",
-    opacity: 0.5,
+    opacity: 0.3,
+    fontFamily: "Tmoney",
   },
   emptyBlock: {
     height: 16,
