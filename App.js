@@ -15,8 +15,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* <SignIn /> */}
-      <SignUp />
+      <SignIn />
+      {/* <SignUp /> */}
     </View>
   );
 }

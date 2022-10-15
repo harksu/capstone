@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#0974fa",
     opacity: 0.5,
+    // flex: 0.4,
     marginTop: 20,
     marginBottom: 30, //일단 눈대중이긴 한데 나중에 제대로
     fontFamily: "Tmoney",
