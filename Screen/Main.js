@@ -47,7 +47,7 @@ const Main = () => {
 export default Main;
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: "white" },
   buttonContainer: {
     flex: 1,
     flexDirection: "row",
