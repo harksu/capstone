@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   back: {
     flex: 0.2,
