@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignIn from "./Screen/SignIn";
 import SignUp from "./Screen/SignUp";
 import Main from "./Screen/Main";
+import Recommend from "./Screen/Recommend";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,9 +24,10 @@ export default function App() {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="메인페이지"
+          initialRouteName="추천페이지"
           screenOptions={{ headerShown: false }}
         >
+          <Stack.Screen name="추천페이지" component={Recommend} />
           <Stack.Screen name="로그인페이지" component={SignIn} />
           <Stack.Screen name="회원가입" component={SignUp} />
           <Stack.Screen name="메인페이지" component={Main} />
