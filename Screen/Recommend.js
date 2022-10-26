@@ -11,25 +11,21 @@ import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 const Recommend = () => {
   const [isShow, setIsShow] = useState(true);
-  const [symptom, setSymptom] = useState("증상을 선택해주세요");
+  const [symptom, setSymptom] = useState("");
 
   const onPress = () => {
     setIsShow(!isShow);
   };
 
-  const onPressSymptom = (item, index) => {
-    setSymptom(symptom.concat(item));
-  };
-
   const templist = [
     //이건 나중에 서버랑 이야기해서 맞추고
-    "감기입니다",
-    "가암기입니다",
-    "가아악기입니다",
-    "까마가윕니다.",
-    "까마가윕니다.",
-    "까마가윕니다.",
-    "까마가윕니다.",
+    "감기1",
+    "감기2",
+    "감기2.2",
+    "감기2.5",
+    "감기3",
+    "감기4",
+    "감기5",
   ];
 
   return (
@@ -39,7 +35,9 @@ const Recommend = () => {
         <View style={styles.selectContainer}>
           <Text style={styles.text}>증상</Text>
           <View style={styles.dropDown}>
-            <Text style={styles.selectText}>{symptom}</Text>
+            <Text style={styles.selectText}>
+              {symptom ? symptom : "증상을 선택해주세요"}
+            </Text>
             <TouchableOpacity onPressIn={onPress}>
               <Image source={require("../assets/drop.png")} />
             </TouchableOpacity>
@@ -51,7 +49,17 @@ const Recommend = () => {
               <ScrollView>
                 {templist?.map((item, index) => {
                   return (
-                    <TouchableOpacity style={styles.menuItem} key={index}>
+                    <TouchableOpacity
+                      style={styles.menuItem}
+                      key={index}
+                      onPressIn={() => {
+                        if (symptom.includes(item)) {
+                          setSymptom(symptom.replace(item, ""));
+                          return;
+                        }
+                        setSymptom(symptom.concat(item + " "));
+                      }}
+                    >
                       <Text style={styles.menuText}>{item}</Text>
                     </TouchableOpacity>
                   );
@@ -62,6 +70,7 @@ const Recommend = () => {
         ) : (
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.selectButton}>
+              {/* 이거 눌렀을 때 서버 통신  */}
               <Text style={styles.buttonText}>확인</Text>
             </TouchableOpacity>
           </View>
