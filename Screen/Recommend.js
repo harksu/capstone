@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { SYMTOMS } from "../Datas/Symptoms";
 const Recommend = () => {
   const [isShow, setIsShow] = useState(true);
   const [symptom, setSymptom] = useState("");
@@ -16,17 +17,6 @@ const Recommend = () => {
   const onPress = () => {
     setIsShow(!isShow);
   };
-
-  const templist = [
-    //이건 나중에 서버랑 이야기해서 맞추고
-    "감기1",
-    "감기2",
-    "감기2.2",
-    "감기2.5",
-    "감기3",
-    "감기4",
-    "감기5",
-  ];
 
   return (
     <View style={styles.container}>
@@ -47,7 +37,7 @@ const Recommend = () => {
           <View style={styles.menuContainer}>
             <View style={styles.menuItemBox}>
               <ScrollView>
-                {templist?.map((item, index) => {
+                {SYMTOMS?.map((item, index) => {
                   return (
                     <TouchableOpacity
                       style={styles.menuItem}
