@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 0.1,
     position: "relative",
-    // backgroundColor: "red",
+    //  backgroundColor: "red",
   },
   back: {
     flex: 0.2,
