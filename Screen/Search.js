@@ -1,12 +1,104 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import React, { useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 
+const tempData = [
+  {
+    name: "임학수",
+    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학순",
+    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학수악",
+    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학순악",
+    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술악",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술악",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+];
+
+const tempResult = {
+  name: "타이레놀",
+  effect: "발열,두통,근육통,감기",
+  ingredient: "아세트아미노펜",
+};
+
+const Comment = ({ last, name, comment }) => {
+  return (
+    <View style={[(last + 1) % 3 === 0 ? styles.lastComment : styles.comment]}>
+      <View style={styles.commentInner}>
+        <Text style={styles.commentText}>{name}</Text>
+        <View style={styles.commentContent}>
+          <Image source={require("../assets/moon.png")} />
+          <Text style={styles.commentText}>{comment}</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+const Content = ({ result }) => {
+  const { name, effect, ingredient } = result;
+  return (
+    <View style={styles.contentContainer}>
+      <View style={styles.content}>
+        <View style={styles.contentImage}>
+          <Image
+            style={styles.image}
+            source={require(`../assets/miniTylenol.png`)}
+          />
+        </View>
+        <View style={styles.contentExplain}>
+          <Text style={styles.contentText}>
+            이름 : {name}
+            {"\n"}
+            효능 : {effect}
+            {"\n"}
+            성분 : {ingredient}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const Search = () => {
+  const [pageNum, setPageNum] = useState(1);
+  const onLeft = () => {
+    if (pageNum === 1) return;
+    setPageNum(pageNum - 1);
+  };
+  const onRight = () => {
+    if (parseInt(tempData.length) / 3 <= pageNum) return;
+    setPageNum(pageNum + 1);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.itemContainer}>
+      <ScrollView style={styles.itemContainer}>
         <Header />
         <View style={styles.selectContainer}>
           <Image
@@ -18,25 +110,31 @@ const Search = () => {
           <Text style={styles.imageText}>500</Text>
           <Image source={require("../assets/titleBlueCapsule.png")} />
         </View>
-        <View style={styles.contentContainer}>
-          <View style={styles.content}>
-            <View style={styles.contentImage}>
-              <Image
-                style={styles.image}
-                source={require("../assets/miniTylenol.png")}
-              />
-            </View>
-            <View style={styles.contentExplain}>
-              <Text style={styles.contentText}>
-                이름 : 타이레놀{"\n"}
-                효능 : 발열, 두통, 근육통, 감기{"\n"}
-                성분 : 아세트아미노펜 500mg
-              </Text>
-            </View>
-          </View>
+        <Content result={tempResult} />
+        <View style={styles.commentContainer}>
+          {tempData
+            .filter((data, index) => parseInt((index + 3) / 3) === pageNum)
+            .map((data, index) => {
+              return (
+                <Comment
+                  key={index}
+                  name={data.name}
+                  comment={data.comment}
+                  last={index}
+                />
+              );
+            })}
         </View>
-        <View style={styles.commentContainer}></View>
-      </View>
+        <View style={styles.pageContainer}>
+          <TouchableOpacity onPressIn={onLeft}>
+            <Image source={require("../assets/left.png")} />
+          </TouchableOpacity>
+          <Text style={styles.pageText}>{pageNum}</Text>
+          <TouchableOpacity onPressIn={onRight}>
+            <Image source={require("../assets/right.png")} />
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
       <Footer />
     </View>
   );
@@ -48,6 +146,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    overflow: "scroll",
   },
   itemContainer: {
     flex: 1.1,
@@ -57,7 +156,7 @@ const styles = StyleSheet.create({
   selectContainer: {
     width: "75%",
     height: 200,
-    marginTop: 52, //헤더포함해서 마진을 적용시키긴했는데 이게 맞는건가 ..?
+    marginTop: 60, //헤더포함해서 마진을 적용시키긴했는데 이게 맞는건가 ..?
     marginLeft: "auto",
     marginRight: "auto",
     //backgroundColor: "pink",
@@ -81,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     width: "75%",
     height: 30,
-    marginTop: 36,
+    marginTop: 26,
     marginLeft: "auto",
     marginRight: "auto",
     //backgroundColor: "blue",
@@ -89,13 +188,51 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     width: "75%",
-    height: 100,
+    height: 200,
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 15,
     borderRadius: 10,
     borderColor: "#a4ccff",
     borderWidth: 2,
+  },
+  pageContainer: {
+    width: 100,
+    height: 30,
+    // backgroundColor: "pink",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 26,
+    marginBottom: 26,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  comment: {
+    width: "100%",
+    height: "33.3%",
+    borderBottomColor: "#a4ccff",
+    borderBottomWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  lastComment: {
+    width: "100%",
+    height: "33.3%",
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "red",
+  },
+  commentText: {
+    fontSize: 10,
+    color: "#000000",
+    lineHeight: 16,
+    fontFamily: "Tmoney",
+  },
+  commentInner: {
+    width: "90%",
+    height: "65%",
+    justifyContent: "space-between",
   },
   imageText: {
     fontSize: 20,
@@ -134,5 +271,14 @@ const styles = StyleSheet.create({
     width: "100%",
     hegiht: "100%",
     backgroundColor: "red",
+  },
+  commentContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  pageText: {
+    color: "#a4ccff",
+    lineHeight: 26,
+    fontSize: 20,
   },
 });
