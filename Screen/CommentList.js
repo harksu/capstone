@@ -41,6 +41,7 @@ const CommentList = ({ route }) => {
 
   const onSubmit = () => {
     setList(list.concat({ name: "유저 닉네임", comment: comment }));
+    setComment("");
   };
 
   return (
@@ -68,8 +69,9 @@ const CommentList = ({ route }) => {
                 value={comment}
                 placeholder="의견을 작성해주세요"
                 style={{ padding: 5, fontSize: 12, lineHeight: 15 }}
-                blurOnSubmit={false}
-                onSubmitEditing={() => Keyboard.dismiss()}
+                onSubmitEditing={() => {
+                  Keyboard.dismiss();
+                }}
               ></TextInput>
               <TouchableOpacity
                 style={styles.submitContainer}

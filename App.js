@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { RecoilRoot } from "recoil";
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import Main from "./Screen/Main";
 import Recommend from "./Screen/Recommend";
 import Search from "./Screen/Search";
 import CommentList from "./Screen/CommentList";
+import Select from "./Screen/Select";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,9 +27,10 @@ export default function App() {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="검색페이지"
+          initialRouteName="선택"
           screenOptions={{ headerShown: false }}
         >
+          <Stack.Screen name="선택페이지" component={Select} />
           <Stack.Screen name="추천페이지" component={Recommend} />
           <Stack.Screen name="댓글페이지" component={CommentList} />
           <Stack.Screen name="검색페이지" component={Search} />
@@ -41,9 +43,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "red",
-  },
-});
+const styles = StyleSheet.create({});

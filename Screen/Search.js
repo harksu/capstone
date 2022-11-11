@@ -123,7 +123,6 @@ const Search = () => {
             });
           }}
         >
-          {/* 여기 누르면 댓글리스트 페이지로 넘어가야됨 */}
           {tempData
             .filter((data, index) => parseInt((index + 3) / 3) === pageNum)
             .map((data, index) => {
