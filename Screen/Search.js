@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -86,6 +87,8 @@ const Content = ({ result }) => {
 };
 
 const Search = () => {
+  const navigation = useNavigation();
+
   const [pageNum, setPageNum] = useState(1);
   const onLeft = () => {
     if (pageNum === 1) return;
@@ -111,7 +114,16 @@ const Search = () => {
           <Image source={require("../assets/titleBlueCapsule.png")} />
         </View>
         <Content result={tempResult} />
-        <View style={styles.commentContainer}>
+        <TouchableOpacity
+          style={styles.commentContainer}
+          onPress={() => {
+            navigation.navigate("댓글페이지", {
+              screen: "댓글페이지",
+              params: tempData,
+            });
+          }}
+        >
+          {/* 여기 누르면 댓글리스트 페이지로 넘어가야됨 */}
           {tempData
             .filter((data, index) => parseInt((index + 3) / 3) === pageNum)
             .map((data, index) => {
@@ -124,7 +136,7 @@ const Search = () => {
                 />
               );
             })}
-        </View>
+        </TouchableOpacity>
         <View style={styles.pageContainer}>
           <TouchableOpacity onPressIn={onLeft}>
             <Image source={require("../assets/left.png")} />

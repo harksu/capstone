@@ -1,10 +1,19 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
 const Header = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.itemContainer}>
-      <TouchableOpacity style={styles.back}>
+      <TouchableOpacity
+        style={styles.back}
+        onPressIn={() => {
+          if (navigation.canGoBack()) {
+            navigation.goBack();
+          }
+        }}
+      >
         <Image source={require("../assets/back.png")} />
         <Image source={require("../assets/titleBlueCapsule.png")} />
         <Text style={styles.text}>Safe Pill</Text>
