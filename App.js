@@ -27,7 +27,7 @@ export default function App() {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="선택"
+          initialRouteName="선택페이지"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="선택페이지" component={Select} />

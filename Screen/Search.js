@@ -46,6 +46,7 @@ const tempResult = {
   name: "타이레놀",
   effect: "발열,두통,근육통,감기",
   ingredient: "아세트아미노펜",
+  returnResult: true,
 };
 
 const Comment = ({ last, name, comment }) => {
@@ -61,16 +62,31 @@ const Comment = ({ last, name, comment }) => {
     </View>
   );
 };
-const Content = ({ result }) => {
-  const { name, effect, ingredient } = result;
+export const Content = ({ result, isSelect }) => {
+  const { name, effect, ingredient, returnResult } = result;
   return (
-    <View style={styles.contentContainer}>
+    <View
+      style={[
+        isSelect ? styles.selectContentContainer : styles.contentContainer,
+      ]}
+    >
       <View style={styles.content}>
         <View style={styles.contentImage}>
-          <Image
+          {returnResult ? (
+            <Image
+              style={styles.image}
+              source={require(`../assets/miniTylenol.png`)}
+            />
+          ) : (
+            <Image
+              style={styles.image}
+              source={require(`../assets/noimage.png`)}
+            />
+          )}
+          {/* <Image
             style={styles.image}
             source={require(`../assets/miniTylenol.png`)}
-          />
+          /> */}
         </View>
         <View style={styles.contentExplain}>
           <Text style={styles.contentText}>
@@ -176,9 +192,21 @@ const styles = StyleSheet.create({
     borderColor: "#cfcfcf",
   },
   contentContainer: {
+    //검색 페이지용
     width: "75%",
     height: 100,
     marginTop: 3.5,
+    marginLeft: "auto",
+    marginRight: "auto",
+    backgroundColor: "#f3f9ff",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectContentContainer: {
+    width: "90%",
+    height: 100,
+    marginTop: 15,
     marginLeft: "auto",
     marginRight: "auto",
     backgroundColor: "#f3f9ff",
@@ -262,7 +290,7 @@ const styles = StyleSheet.create({
   },
   contentImage: {
     width: "25%",
-    height: "50%",
+    height: "60%",
     // backgroundColor: "yellow",
   },
   contentExplain: {
@@ -281,7 +309,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     hegiht: "100%",
-    backgroundColor: "red",
+    resizeMode: "cover",
+    //backgroundColor: "pink",
   },
   commentContent: {
     flexDirection: "row",

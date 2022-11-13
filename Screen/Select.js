@@ -5,33 +5,86 @@ import {
   TextInput,
   Keyboard,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { Content } from "./Search";
+
+const tempResult = {
+  name: "타이레놀",
+  effect: "발열,두통,근육통,감기",
+  ingredient: "아세트아미노펜 500mg",
+  returnResult: true,
+};
+const tempResult2 = {
+  name: "어린이용 타이레놀",
+  effect: "발열,두통,근육통,감기",
+  ingredient: "아세트아미노펜 80mg",
+  returnResult: false,
+};
+
+const tempList = [tempResult, tempResult2];
 
 const Item = ({ name }) => {
   const [itemName, setItemName] = useState("");
+  const [isSearched, setIsSearched] = useState(false);
   return (
-    <View style={styles.selectItem}>
-      <View style={{ flex: 1 }}>
-        <TextInput
-          placeholder={name}
-          style={styles.Text}
-          placeholderTextColor={"#bfbfbf"}
-          value={itemName}
-          onChangeText={setItemName}
-          onSubmitEditing={() => {
-            Keyboard.dismiss();
+    <View style={[isSearched ? styles.selectResult : styles.selectItem]}>
+      {isSearched ? (
+        <>
+          <TouchableOpacity
+            style={styles.selectResultTitle}
+            onPress={() => {
+              setIsSearched(false);
+              setItemName("");
+            }}
+          >
+            <Text style={styles.selectResultTitleText}>
+              {itemName ? itemName : "검색"}
+            </Text>
+          </TouchableOpacity>
+          {itemName ? (
+            <View style={styles.selectResultContent}>
+              {tempList.map((data, index) => {
+                return (
+                  <TouchableOpacity>
+                    <Content result={data} key={index} isSelect />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <Text style={styles.selectResultText}>
+              해당 약이 없습니다. 다시 검색해주세요
+            </Text>
+          )}
+        </>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <TextInput
+            placeholder={name}
+            style={styles.Text}
+            placeholderTextColor={"#bfbfbf"}
+            value={itemName}
+            onChangeText={setItemName}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
+          ></TextInput>
+        </View>
+      )}
+      {!isSearched && (
+        <TouchableOpacity
+          style={styles.selectButton}
+          onPress={() => {
+            setIsSearched(true);
           }}
-        ></TextInput>
-      </View>
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => setItemName("")}
-      >
-        <Text style={styles.buttonText}>검색</Text>
-      </TouchableOpacity>
+        >
+          <Text style={styles.buttonText}>검색</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -43,22 +96,26 @@ const Select = () => {
       <View style={styles.itemContainer}>
         <Header />
         <View style={styles.item}>
-          <Text style={styles.titleText}>알약 선택하기</Text>
-          {itemList.map((data, index) => {
-            return <Item name={`약${index + 1}`} />;
-          })}
-          <View style={{ marginLeft: "auto", marginRight: "auto" }}>
-            <TouchableOpacity
-              style={styles.selectButton}
-              onPress={() => {
-                if (itemList.length > 3) return;
-                setItemList(itemList.concat(" "));
-              }}
-            >
-              <Text style={styles.buttonText}>+추가</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.alertText}>같이 복용할 알약을 섵개해주세요.</Text>
+          <ScrollView>
+            <Text style={styles.titleText}>알약 선택하기</Text>
+            {itemList.map((data, index) => {
+              return <Item name={`약${index + 1}`} key={index} />;
+            })}
+            <View style={{ marginLeft: "auto", marginRight: "auto" }}>
+              <TouchableOpacity
+                style={styles.selectButton}
+                onPress={() => {
+                  if (itemList.length > 3) return;
+                  setItemList(itemList.concat(" "));
+                }}
+              >
+                <Text style={styles.buttonText}>+추가</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.alertText}>
+              같이 복용할 알약을 선택해주세요.
+            </Text>
+          </ScrollView>
         </View>
       </View>
       <Footer />
@@ -98,6 +155,57 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginBottom: 40,
+  },
+  selectResult: {
+    // flexDirection: "row",
+    // justifyContent: "space-between",
+    width: "75%",
+    height: 450,
+    borderWidth: 2,
+    borderColor: "#a4ccff",
+    borderRadius: 15,
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: 40,
+  },
+  selectResultContent: {
+    // width: "120%",
+    // backgroundColor: "pink",
+  },
+  selectResultTitle: {
+    width: "90%",
+    height: 40,
+    // backgroundColor: "pink",
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#a4ccff",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 14,
+    justifyContent: "center",
+  },
+  selectResultTitleText: {
+    fontSize: 20,
+    lineHeight: 26,
+    fontFamily: "Tmoney",
+    color: "#e2e2e2",
+    marginLeft: 15,
+  },
+  selectResultText: {
+    fontSize: 15,
+    lineHeight: 20,
+    fontFamily: "Tmoney",
+    color: "#e2e2e2",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: 44,
+  },
+  selectItemResultText: {
+    fontSize: 15,
+    lineHeight: 20,
+    fontFamily: "Tmoney",
+    color: "#e2e2e2",
+    marginLeft: 15,
   },
   selectButton: {
     borderWidth: 2,
