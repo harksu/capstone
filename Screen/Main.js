@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
 
 //이거 나중에 component로 찢으면 좋은데
 
 const Main = () => {
+  const navigation = useNavigation();
   return (
     <LinearGradient
       colors={["#0974fa", "#ffffff"]}
@@ -17,11 +19,25 @@ const Main = () => {
         <Text style={styles.logoText}>Safe{"\n"}Pill</Text>
       </TouchableOpacity>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("추천페이지", {
+              screen: "추천페이지",
+            });
+          }}
+        >
           <Image source={require("../assets/yellowcapsule.png")} />
           <Text style={styles.buttonText}>약 추천받기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("선택페이지", {
+              screen: "선택페이지",
+            });
+          }}
+        >
           <Image source={require("../assets/bluecapsule.png")} />
           <Text style={styles.buttonText}>약 검색하기</Text>
         </TouchableOpacity>

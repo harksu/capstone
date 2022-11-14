@@ -11,6 +11,7 @@ import Recommend from "./Screen/Recommend";
 import Search from "./Screen/Search";
 import CommentList from "./Screen/CommentList";
 import Select from "./Screen/Select";
+import Result from "./Screen/Result";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,10 +28,11 @@ export default function App() {
     <RecoilRoot>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="선택페이지"
+          initialRouteName="메인페이지"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="선택페이지" component={Select} />
+          <Stack.Screen name="결과페이지" component={Result} />
           <Stack.Screen name="추천페이지" component={Recommend} />
           <Stack.Screen name="댓글페이지" component={CommentList} />
           <Stack.Screen name="검색페이지" component={Search} />

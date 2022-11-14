@@ -8,9 +8,12 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import { useRecoilState } from "recoil";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { useNavigation } from "@react-navigation/native";
 import { Content } from "./Search";
+import { selectedItem } from "../Atoms/atoms";
 
 const tempResult = {
   name: "타이레놀",
@@ -27,9 +30,20 @@ const tempResult2 = {
 
 const tempList = [tempResult, tempResult2];
 
-const Item = ({ name }) => {
+const Item = ({ name, number }) => {
   const [itemName, setItemName] = useState("");
   const [isSearched, setIsSearched] = useState(false);
+  const [picked, setPicked] = useRecoilState(selectedItem);
+
+  const onPress = (data) => {
+    if (number === 0) {
+      setPicked({ ...picked, first: data.name });
+    } else {
+      setPicked({ ...picked, second: data.name });
+    }
+    setItemName(data.name);
+  };
+
   return (
     <View style={[isSearched ? styles.selectResult : styles.selectItem]}>
       {isSearched ? (
@@ -38,7 +52,11 @@ const Item = ({ name }) => {
             style={styles.selectResultTitle}
             onPress={() => {
               setIsSearched(false);
-              setItemName("");
+              if (number === 0) {
+                setItemName(picked.first);
+              } else {
+                setItemName(picked.second);
+              }
             }}
           >
             <Text style={styles.selectResultTitleText}>
@@ -49,7 +67,11 @@ const Item = ({ name }) => {
             <View style={styles.selectResultContent}>
               {tempList.map((data, index) => {
                 return (
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      onPress(data);
+                    }}
+                  >
                     <Content result={data} key={index} isSelect />
                   </TouchableOpacity>
                 );
@@ -90,7 +112,9 @@ const Item = ({ name }) => {
 };
 
 const Select = () => {
-  const [itemList, setItemList] = useState(["약", "약"]);
+  const [itemList, setItemList] = useState(["약"]);
+  const [ready, setReady] = useState(false);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.itemContainer}>
@@ -99,17 +123,27 @@ const Select = () => {
           <ScrollView>
             <Text style={styles.titleText}>알약 선택하기</Text>
             {itemList.map((data, index) => {
-              return <Item name={`약${index + 1}`} key={index} />;
+              return (
+                <Item name={`약${index + 1}`} key={index} number={index} />
+              );
             })}
             <View style={{ marginLeft: "auto", marginRight: "auto" }}>
               <TouchableOpacity
                 style={styles.selectButton}
                 onPress={() => {
-                  if (itemList.length > 3) return;
+                  if (itemList.length > 1) {
+                    setReady(true);
+                    navigation.navigate("선택페이지", {
+                      screen: "선택페이지",
+                    });
+                    return;
+                  }
                   setItemList(itemList.concat(" "));
                 }}
               >
-                <Text style={styles.buttonText}>+추가</Text>
+                <Text style={styles.buttonText}>
+                  {itemList.length === 2 ? `확인` : `+추가`}
+                </Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.alertText}>
