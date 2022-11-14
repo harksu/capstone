@@ -1,21 +1,73 @@
 import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+
+const tempData = [
+  {
+    name: "임학수",
+    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학순",
+    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학수악",
+    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학순악",
+    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술악",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+  {
+    name: "임학술악",
+    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
+  },
+];
 
 const Footer = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.footer}>
       <View style={styles.footerBox}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("메인페이지", {
+              screen: "메인페이지",
+            });
+          }}
+        >
           <Image source={require("../assets/leftLogo.png")} />
         </TouchableOpacity>
       </View>
       <View style={styles.footerBox}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("로그인페이지", {
+              screen: "로그인페이지",
+            });
+          }}
+        >
           <Image source={require("../assets/Profile.png")} />
         </TouchableOpacity>
       </View>
       <View style={styles.footerBox}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("댓글페이지", {
+              screen: "댓글페이지",
+              params: tempData,
+            });
+          }}
+        >
           <Image source={require("../assets/rightLogo.png")} />
         </TouchableOpacity>
       </View>

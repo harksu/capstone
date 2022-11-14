@@ -8,9 +8,12 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useState, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
 
 const SignIn = () => {
+  const navigation = useNavigation();
+
   const [userInfo, setUserInfo] = useState({
     id: "",
     pw: "",
@@ -27,7 +30,13 @@ const SignIn = () => {
       <View style={styles.itemContainer}>
         <View style={styles.inputBox}>
           <View style={styles.back}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("메인페이지", {
+                  screen: "메인페이지",
+                });
+              }}
+            >
               {/* 이거 누를 때 로그인 페이지로 강제라우팅(첫번째 페이지로) */}
               <Image source={require("../assets/back.png")} />
             </TouchableOpacity>
@@ -59,7 +68,7 @@ const SignIn = () => {
               ref={pwRef}
               blurOnSubmit={false}
               onSubmitEditing={() => {
-                pwCheckRef.current.focus();
+                // pwCheckRef.current.focus(); 이게 왜 있는거지 ?
               }}
             />
             {pwRegEx.test(userInfo.pw) ? (
@@ -71,9 +80,19 @@ const SignIn = () => {
             )}
           </View>
         </View>
+        <TouchableOpacity
+          style={styles.alertTextContainer}
+          onPress={() => {
+            navigation.navigate("회원가입", {
+              screen: "회원가입",
+            });
+          }}
+        >
+          <Text style={styles.routeText}>회원가입</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.loginButton}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {}}>
           <Text style={styles.loginText}>로그인하기</Text>
         </TouchableOpacity>
       </View>
@@ -111,16 +130,22 @@ const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "row",
     marginLeft: -10,
-    // backgroundColor: "pink",
   },
   itemContainer: {
     flex: 1.1,
+  },
+  alertTextContainer: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    height: 15,
+    width: "44%",
   },
   inputBox: {
     flex: 0.7,
     marginTop: 67,
     marginLeft: 20,
     marginRight: 20, //리넥 마진 적용 극혐;
+    marginBottom: 15,
   },
   titleContainer: { flex: 0.5 },
   passwordContainer: {
@@ -157,6 +182,13 @@ const styles = StyleSheet.create({
   },
   emptyBlock: {
     height: 16,
+  },
+  routeText: {
+    fontSize: 10,
+    lineHeight: 16,
+    color: "#a4ccff",
+    fontFamily: "Tmoney",
+    textAlign: "center",
   },
   input: {
     borderBottomWidth: 1,

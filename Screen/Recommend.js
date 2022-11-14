@@ -7,10 +7,14 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { SYMTOMS } from "../Datas/Symptoms";
+
 const Recommend = () => {
+  const navigation = useNavigation();
+
   const [isShow, setIsShow] = useState(true);
   const [symptom, setSymptom] = useState("");
 
@@ -59,8 +63,17 @@ const Recommend = () => {
           </View>
         ) : (
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.selectButton}>
-              {/* 이거 눌렀을 때 서버 통신  */}
+            <TouchableOpacity
+              style={styles.selectButton}
+              onPress={() => {
+                navigation.navigate("검색페이지", {
+                  screen: "검색페이지",
+                  params: symptom,
+                });
+              }}
+            >
+              {/* 이거 눌렀을 때 서버 통신 {symptom}  */}
+
               <Text style={styles.buttonText}>확인</Text>
             </TouchableOpacity>
           </View>

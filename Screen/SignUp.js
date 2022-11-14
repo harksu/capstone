@@ -8,8 +8,12 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useState, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
+
 const SignUp = () => {
+  const navigation = useNavigation();
+
   const [userInfo, setUserInfo] = useState({
     id: "",
     pw: "",
@@ -28,8 +32,13 @@ const SignUp = () => {
       <View style={styles.itemContainer}>
         <View style={styles.inputBox}>
           <View style={styles.back}>
-            <TouchableOpacity>
-              {/* 이거 누를 때 로그인 페이지로 강제라우팅(첫번째 페이지로) */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("로그인페이지", {
+                  screen: "로그인페이지",
+                });
+              }}
+            >
               <Image source={require("../assets/back.png")} />
             </TouchableOpacity>
           </View>

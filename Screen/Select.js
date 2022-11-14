@@ -133,8 +133,8 @@ const Select = () => {
                 onPress={() => {
                   if (itemList.length > 1) {
                     setReady(true);
-                    navigation.navigate("선택페이지", {
-                      screen: "선택페이지",
+                    navigation.navigate("결과페이지", {
+                      screen: "결과페이지",
                     });
                     return;
                   }
