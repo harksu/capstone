@@ -9,39 +9,48 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { useNavigation } from "@react-navigation/native";
 import { Content } from "./Search";
 import { selectedItem } from "../Atoms/atoms";
 
-const tempResult = {
-  name: "타이레놀",
-  effect: "발열,두통,근육통,감기",
-  ingredient: "아세트아미노펜 500mg",
-  returnResult: true,
-};
-const tempResult2 = {
-  name: "어린이용 타이레놀",
-  effect: "발열,두통,근육통,감기",
-  ingredient: "아세트아미노펜 80mg",
-  returnResult: false,
-};
+// const tempResult = {
+//   name: "타이레놀",
+//   effect: "발열,두통,근육통,감기",
+//   ingredient: "아세트아미노펜 500mg",
+//   returnResult: true,
+// };
+// const tempResult2 = {
+//   name: "어린이용 타이레놀",
+//   effect: "발열,두통,근육통,감기",
+//   ingredient: "아세트아미노펜 80mg",
+//   returnResult: false,
+// };
 
-const tempList = [tempResult, tempResult2];
+// const tempList = [tempResult, tempResult2];
 
 const Item = ({ name, number }) => {
   const [itemName, setItemName] = useState("");
   const [isSearched, setIsSearched] = useState(false);
   const [picked, setPicked] = useRecoilState(selectedItem);
+  const [resultList, setResultList] = useState([]);
 
   const onPress = (data) => {
     if (number === 0) {
-      setPicked({ ...picked, first: data.name });
+      setPicked({ ...picked, first: data.item_name });
     } else {
-      setPicked({ ...picked, second: data.name });
+      setPicked({ ...picked, second: data.item_name });
     }
-    setItemName(data.name);
+    setItemName(data.item_name);
+  };
+
+  const testAxios = () => {
+    axios
+      .get("/node/pill/symptom?limit:2&symptom=두통") //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
+      .then((res) => setResultList(resultList.concat(res.data.data.pill)))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -65,17 +74,21 @@ const Item = ({ name, number }) => {
           </TouchableOpacity>
           {itemName ? (
             <View style={styles.selectResultContent}>
-              {tempList.map((data, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      onPress(data);
-                    }}
-                  >
-                    <Content result={data} key={index} isSelect />
-                  </TouchableOpacity>
-                );
-              })}
+              <ScrollView>
+                {resultList.map((data, index) => {
+                  const templist = data.materlal_name.split("|");
+                  //console.log("이게 배열입니다" + templist[1]);
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onPress(data);
+                      }}
+                    >
+                      <Content result={data} key={index} isSelect />
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
             </View>
           ) : (
             <Text style={styles.selectResultText}>
@@ -102,6 +115,7 @@ const Item = ({ name, number }) => {
           style={styles.selectButton}
           onPress={() => {
             setIsSearched(true);
+            testAxios();
           }}
         >
           <Text style={styles.buttonText}>검색</Text>
@@ -124,7 +138,7 @@ const Select = () => {
             <Text style={styles.titleText}>알약 선택하기</Text>
             {itemList.map((data, index) => {
               return (
-                <Item name={`약${index + 1}`} key={index} number={index} />
+                <Item name={`약${index + 1}`} key={index + 1} number={index} />
               );
             })}
             <View style={{ marginLeft: "auto", marginRight: "auto" }}>
@@ -204,7 +218,8 @@ const styles = StyleSheet.create({
   },
   selectResultContent: {
     // width: "120%",
-    // backgroundColor: "pink",
+    flex: 1,
+    backgroundColor: "pink",
   },
   selectResultTitle: {
     width: "90%",

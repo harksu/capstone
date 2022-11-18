@@ -63,7 +63,10 @@ const Comment = ({ last, name, comment }) => {
   );
 };
 export const Content = ({ result, isSelect }) => {
-  const { name, effect, ingredient, returnResult } = result;
+  const { item_name, ee_doc_data, materlal_name, link } = result;
+  const ingredient = materlal_name.split("|")[1].substring(6); // 필터링
+  const effect = ee_doc_data.replace("[", "").replace("]", "");
+  //const imgSrc = { uri: link }; 이거 나중에 살리면 이미지 연동 ㄱ
   return (
     <View
       style={[
@@ -72,25 +75,22 @@ export const Content = ({ result, isSelect }) => {
     >
       <View style={styles.content}>
         <View style={styles.contentImage}>
-          {returnResult ? (
+          {link ? (
             <Image
               style={styles.image}
-              source={require(`../assets/miniTylenol.png`)}
-            />
+              source={require(`../assets/noimage.png`)}
+            /> //일단 s3 렌더링 막기 위해서 이렇게, 나중에는 밑에 코드로 적용 ㄱ(자동정렬때문에 밑으로 내려감)
           ) : (
+            // <Image style={styles.image} source={imgSrc} />
             <Image
               style={styles.image}
               source={require(`../assets/noimage.png`)}
             />
           )}
-          {/* <Image
-            style={styles.image}
-            source={require(`../assets/miniTylenol.png`)}
-          /> */}
         </View>
         <View style={styles.contentExplain}>
           <Text style={styles.contentText}>
-            이름 : {name}
+            이름 : {item_name}
             {"\n"}
             효능 : {effect}
             {"\n"}
@@ -294,8 +294,9 @@ const styles = StyleSheet.create({
     // backgroundColor: "yellow",
   },
   contentExplain: {
+    flex: 1,
     width: "70%",
-    height: "70%",
+    // height: "70%",
     //backgroundColor: "red",
   },
   contentText: {

@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { RecoilRoot } from "recoil";
+import axios from "axios";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignIn from "./Screen/SignIn";
@@ -12,6 +13,8 @@ import Search from "./Screen/Search";
 import CommentList from "./Screen/CommentList";
 import Select from "./Screen/Select";
 import Result from "./Screen/Result";
+
+axios.defaults.baseURL = "http://3.35.231.183"; //이거 나중에 도메인으로 변경
 
 const Stack = createNativeStackNavigator();
 
