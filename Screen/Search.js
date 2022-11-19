@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   selectContentContainer: {
     width: "90%",
-    height: 100,
+    // height: 100, //가변 div
     marginTop: 15,
     marginLeft: "auto",
     marginRight: "auto",
@@ -281,9 +281,11 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   content: {
-    //backgroundColor: "pink",
+    // backgroundColor: "pink",
+    flex: 1,
+    //alignItems: "stretch",
     width: "93%",
-    height: "80%",
+    // height: "80%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

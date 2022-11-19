@@ -47,9 +47,13 @@ const Item = ({ name, number }) => {
   };
 
   const testAxios = () => {
+    console.log(itemName);
     axios
-      .get("/node/pill/symptom?limit:2&symptom=두통") //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
-      .then((res) => setResultList(resultList.concat(res.data.data.pill)))
+      .get(`/node/pill/name?name=${itemName}`) //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
+      .then((res) => {
+        setResultList(resultList.concat(res.data.data.pill));
+        console.log(res.data.data.pill);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -74,7 +78,7 @@ const Item = ({ name, number }) => {
           </TouchableOpacity>
           {itemName ? (
             <View style={styles.selectResultContent}>
-              <ScrollView>
+              <ScrollView nestedScrollEnabled>
                 {resultList.map((data, index) => {
                   const templist = data.materlal_name.split("|");
                   //console.log("이게 배열입니다" + templist[1]);
@@ -102,7 +106,7 @@ const Item = ({ name, number }) => {
             placeholder={name}
             style={styles.Text}
             placeholderTextColor={"#bfbfbf"}
-            value={itemName}
+            // value={itemName} 이거 없애야 한글 분리가 안됨
             onChangeText={setItemName}
             onSubmitEditing={() => {
               Keyboard.dismiss();
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
   selectResultContent: {
     // width: "120%",
     flex: 1,
-    backgroundColor: "pink",
+    //backgroundColor: "pink",
   },
   selectResultTitle: {
     width: "90%",
