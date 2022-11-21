@@ -63,10 +63,11 @@ const Comment = ({ last, name, comment }) => {
   );
 };
 export const Content = ({ result, isSelect }) => {
+  // console.log(result);
   const { item_name, ee_doc_data, materlal_name, link } = result;
   const ingredient = materlal_name.split("|")[1].substring(6); // 필터링
   const effect = ee_doc_data.replace("[", "").replace("]", "");
-  //const imgSrc = { uri: link }; 이거 나중에 살리면 이미지 연동 ㄱ
+  const imgSrc = { uri: link };
   return (
     <View
       style={[
@@ -78,10 +79,11 @@ export const Content = ({ result, isSelect }) => {
           {link ? (
             <Image
               style={styles.image}
-              source={require(`../assets/noimage.png`)}
-            /> //일단 s3 렌더링 막기 위해서 이렇게, 나중에는 밑에 코드로 적용 ㄱ(자동정렬때문에 밑으로 내려감)
+              // source={require(`../assets/noimage.png`)}
+              source={imgSrc}
+            />
           ) : (
-            // <Image style={styles.image} source={imgSrc} />
+            //일단 s3 렌더링 막기 위해서 이렇게, 나중에는 밑에 코드로 적용 ㄱ(자동정렬때문에 밑으로 내려감)
             <Image
               style={styles.image}
               source={require(`../assets/noimage.png`)}

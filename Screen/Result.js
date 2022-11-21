@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { selectedItem } from "../Atoms/atoms";
@@ -13,21 +14,31 @@ const ImageItem = ({ index, src }) => {
     <View
       style={[index === 0 ? styles.firstImageContainer : styles.ImageContainer]}
     >
-      <Image style={styles.image} source={src} />
+      <Image style={styles.image} source={{ uri: src }} />
     </View>
   );
 };
 
 const tempImageList = [tylenol, noImage];
 const Result = () => {
-  const { first, second } = useRecoilValue(selectedItem);
+  const [isResult, setIsResult] = useState("");
+  const picked = useRecoilValue(selectedItem);
+  const { first, second, first_link, second_link } = picked;
+  useEffect(() => {
+    console.log("병용금기");
+    axios
+      .get(`pill_a=${first}&pill_b=${second}`)
+      .then((res) => console.log(res))
+      .catch((err) => setIsResult("같이 복용하실 수 있습니다."));
+  });
   return (
     <View style={styles.container}>
       <Header />
       <View style={styles.itemContainer}>
         <View style={styles.contentContainer}>
           {tempImageList.map((data, index) => {
-            return <ImageItem index={index} key={index} src={data} />;
+            const link = index === 0 ? first_link : second_link;
+            return <ImageItem index={index} key={index} src={link} />;
           })}
           <View style={styles.resultTextContainer}>
             <Text style={styles.nameText}>
@@ -35,8 +46,8 @@ const Result = () => {
               {second} 성분 : ~~~
             </Text>
             <Text style={styles.resultText}>
-              {first} 과 {second}는 같이 복용하실 수 있습니다.{"\n"}주의사항 :
-              ~~~
+              {first} 과 {second}는 {isResult}
+              {"\n"}주의사항 : ~~~
             </Text>
           </View>
         </View>

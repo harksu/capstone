@@ -32,29 +32,39 @@ import { selectedItem } from "../Atoms/atoms";
 // const tempList = [tempResult, tempResult2];
 
 const Item = ({ name, number }) => {
+  //이거 독립 개체니까 나중에 검색 배열 관리 다시
   const [itemName, setItemName] = useState("");
   const [isSearched, setIsSearched] = useState(false);
   const [picked, setPicked] = useRecoilState(selectedItem);
   const [resultList, setResultList] = useState([]);
+  const [none, setNone] = useState(false);
 
+  // console.log(itemName);
+  // console.log(picked);
   const onPress = (data) => {
+    //  console.log(data);
     if (number === 0) {
-      setPicked({ ...picked, first: data.item_name });
+      setPicked({ ...picked, first: data.item_name, first_link: data.link });
     } else {
-      setPicked({ ...picked, second: data.item_name });
+      setPicked({ ...picked, second: data.item_name, second_link: data.link });
     }
     setItemName(data.item_name);
   };
 
   const testAxios = () => {
-    console.log(itemName);
+    setResultList([]); //한번밀고 시작
     axios
       .get(`/node/pill/name?name=${itemName}`) //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
       .then((res) => {
+        setNone(false);
         setResultList(resultList.concat(res.data.data.pill));
-        console.log(res.data.data.pill);
+        //  console.log(res.data.data.pill);
+        setItemName(""); //이걸 밀어버리면?
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setNone(true);
+      });
   };
 
   return (
@@ -76,19 +86,17 @@ const Item = ({ name, number }) => {
               {itemName ? itemName : "검색"}
             </Text>
           </TouchableOpacity>
-          {itemName ? (
+          {!none ? (
             <View style={styles.selectResultContent}>
               <ScrollView nestedScrollEnabled>
                 {resultList.map((data, index) => {
-                  const templist = data.materlal_name.split("|");
-                  //console.log("이게 배열입니다" + templist[1]);
                   return (
                     <TouchableOpacity
                       onPress={() => {
                         onPress(data);
                       }}
                     >
-                      <Content result={data} key={index} isSelect />
+                      <Content result={data} key={data.id} isSelect />
                     </TouchableOpacity>
                   );
                 })}
@@ -132,6 +140,7 @@ const Item = ({ name, number }) => {
 const Select = () => {
   const [itemList, setItemList] = useState(["약"]);
   const [ready, setReady] = useState(false);
+  const [picked] = useRecoilState(selectedItem);
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -141,9 +150,11 @@ const Select = () => {
           <ScrollView>
             <Text style={styles.titleText}>알약 선택하기</Text>
             {itemList.map((data, index) => {
-              return (
-                <Item name={`약${index + 1}`} key={index + 1} number={index} />
-              );
+              var name = `약${index + 1}`;
+              if (picked) {
+                name = index === 0 ? picked.first : picked.second;
+              }
+              return <Item name={name} key={name} number={index} />;
             })}
             <View style={{ marginLeft: "auto", marginRight: "auto" }}>
               <TouchableOpacity
