@@ -52,14 +52,13 @@ const Item = ({ name, number }) => {
   };
 
   const testAxios = () => {
-    setResultList([]); //한번밀고 시작
     axios
       .get(`/node/pill/name?name=${itemName}`) //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
       .then((res) => {
         setNone(false);
         setResultList(resultList.concat(res.data.data.pill));
         //  console.log(res.data.data.pill);
-        setItemName(""); //이걸 밀어버리면?
+        // setItemName(""); //이걸 밀어버리면?
       })
       .catch((err) => {
         console.log(err);
@@ -127,6 +126,7 @@ const Item = ({ name, number }) => {
           style={styles.selectButton}
           onPress={() => {
             setIsSearched(true);
+            setResultList([]); //한번밀고 시작
             testAxios();
           }}
         >
