@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -17,6 +18,7 @@ const Recommend = () => {
 
   const [isShow, setIsShow] = useState(true);
   const [symptom, setSymptom] = useState("");
+  const [result, setResult] = useState([]);
 
   const onPress = () => {
     setIsShow(!isShow);
@@ -66,10 +68,18 @@ const Recommend = () => {
             <TouchableOpacity
               style={styles.selectButton}
               onPress={() => {
-                navigation.navigate("검색페이지", {
-                  screen: "검색페이지",
-                  params: symptom,
-                });
+                console.log(symptom);
+                axios
+                  .get(`/node/pill/symptom?symptom=${symptom}`)
+                  .then((res) => setResult(result.concat(res.data.data.pill)))
+                  .then(console.log(result))
+                  // .then(
+                  //   navigation.navigate("검색페이지", {
+                  //     screen: "검색페이지",
+                  //     params: result,
+                  //   })
+                  // )
+                  .catch((err) => console.log(err));
               }}
             >
               {/* 이거 눌렀을 때 서버 통신 {symptom}  */}
