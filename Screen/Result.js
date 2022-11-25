@@ -22,8 +22,16 @@ const ImageItem = ({ index, src }) => {
 const tempImageList = [tylenol, noImage];
 const Result = () => {
   const [isResult, setIsResult] = useState("");
+  const [alert, setAlert] = useState("");
   const picked = useRecoilValue(selectedItem);
-  const { first, second, first_link, second_link } = picked;
+  const {
+    first,
+    second,
+    first_link,
+    second_link,
+    first_ingredient,
+    second_ingredient,
+  } = picked;
   useEffect(() => {
     console.log("병용금기");
     axios
@@ -42,12 +50,12 @@ const Result = () => {
           })}
           <View style={styles.resultTextContainer}>
             <Text style={styles.nameText}>
-              {first} 성분 : ~~~ {"\n"}
-              {second} 성분 : ~~~
+              {first} 성분 : {first_ingredient} {"\n"}
+              {second} 성분 : {second_ingredient}
             </Text>
             <Text style={styles.resultText}>
               {first} 과 {second}는 {isResult}
-              {"\n"}주의사항 : ~~~
+              {"\n"}주의사항 : {alert ? "이건결과값" : "없습니다."}
             </Text>
           </View>
         </View>

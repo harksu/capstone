@@ -7,5 +7,7 @@ export const selectedItem = atom({
     second: "약이름2",
     first_link: "../assets/noimage.png",
     second_link: "../assets/noimage.png",
+    first_ingredient: "재료이름1",
+    second_ingredient: "재료이름2",
   },
 });

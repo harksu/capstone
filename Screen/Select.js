@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import Header from "../Components/Header";
@@ -16,49 +16,46 @@ import { useNavigation } from "@react-navigation/native";
 import { Content } from "./Search";
 import { selectedItem } from "../Atoms/atoms";
 
-// const tempResult = {
-//   name: "타이레놀",
-//   effect: "발열,두통,근육통,감기",
-//   ingredient: "아세트아미노펜 500mg",
-//   returnResult: true,
-// };
-// const tempResult2 = {
-//   name: "어린이용 타이레놀",
-//   effect: "발열,두통,근육통,감기",
-//   ingredient: "아세트아미노펜 80mg",
-//   returnResult: false,
-// };
-
-// const tempList = [tempResult, tempResult2];
-
 const Item = ({ name, number }) => {
-  //이거 독립 개체니까 나중에 검색 배열 관리 다시
   const [itemName, setItemName] = useState("");
-  const [isSearched, setIsSearched] = useState(false);
-  const [picked, setPicked] = useRecoilState(selectedItem);
   const [resultList, setResultList] = useState([]);
+  const [isSearched, setIsSearched] = useState(false);
   const [none, setNone] = useState(false);
 
-  // console.log(itemName);
-  // console.log(picked);
+  const [picked, setPicked] = useRecoilState(selectedItem);
+
   const onPress = (data) => {
-    //  console.log(data);
+    const ingredient = data.materlal_name.split("|")[1].substring(6); // 필터링
     if (number === 0) {
-      setPicked({ ...picked, first: data.item_name, first_link: data.link });
+      setPicked({
+        ...picked,
+        first: data.item_name,
+        first_link: data.link,
+        first_ingredient: ingredient,
+      });
     } else {
-      setPicked({ ...picked, second: data.item_name, second_link: data.link });
+      setPicked({
+        ...picked,
+        second: data.item_name,
+        second_link: data.link,
+        second_ingredient: ingredient,
+      });
     }
     setItemName(data.item_name);
   };
 
+  useEffect(() => {
+    setResultList([]);
+    //이게 베스트 로직은 아닌 것 같은데
+  }, [itemName]);
+
   const testAxios = () => {
     axios
-      .get(`/node/pill/name?name=${itemName}`) //이거 나중에 증상명으로 바꿔야되는데, 검색기능이 증상이랑 약 2개라서 .. 생각해봐야될듯 -> 피그마 기준으로 나누면 됨
+      .get(`/node/pill/name?name=${itemName}`)
       .then((res) => {
         setNone(false);
-        setResultList(resultList.concat(res.data.data.pill));
-        //  console.log(res.data.data.pill);
-        // setItemName(""); //이걸 밀어버리면?
+        if (resultList.length === 0)
+          setResultList(resultList.concat(res.data.data.pill));
       })
       .catch((err) => {
         console.log(err);
@@ -95,7 +92,7 @@ const Item = ({ name, number }) => {
                         onPress(data);
                       }}
                     >
-                      <Content result={data} key={data.id} isSelect />
+                      <Content result={data} key={index} isSelect />
                     </TouchableOpacity>
                   );
                 })}
@@ -126,7 +123,6 @@ const Item = ({ name, number }) => {
           style={styles.selectButton}
           onPress={() => {
             setIsSearched(true);
-            setResultList([]); //한번밀고 시작
             testAxios();
           }}
         >
@@ -151,10 +147,11 @@ const Select = () => {
             <Text style={styles.titleText}>알약 선택하기</Text>
             {itemList.map((data, index) => {
               var name = `약${index + 1}`;
+              const keyValue = `${name} ${index}`;
               if (picked) {
                 name = index === 0 ? picked.first : picked.second;
               }
-              return <Item name={name} key={name} number={index} />;
+              return <Item name={name} key={keyValue} number={index} />;
             })}
             <View style={{ marginLeft: "auto", marginRight: "auto" }}>
               <TouchableOpacity

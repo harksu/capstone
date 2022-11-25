@@ -12,13 +12,35 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { SYMTOMS } from "../Datas/Symptoms";
+import { Content } from "./Search";
+
+const resultView = () => {
+  return (
+    <View style={styles.selectResultContent}>
+      <ScrollView nestedScrollEnabled>
+        {resultList.map((data, index) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                // onPress(data);
+              }}
+            >
+              <Content result={data} key={index} isSelect />
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+};
 
 const Recommend = () => {
   const navigation = useNavigation();
 
   const [isShow, setIsShow] = useState(true);
   const [symptom, setSymptom] = useState("");
-  const [result, setResult] = useState([]);
+  const [resultList, setResultList] = useState([]);
+  const [isSearched, setIsSearched] = useState(false);
 
   const onPress = () => {
     setIsShow(!isShow);
@@ -49,11 +71,12 @@ const Recommend = () => {
                       style={styles.menuItem}
                       key={index}
                       onPressIn={() => {
-                        if (symptom.includes(item)) {
-                          setSymptom(symptom.replace(item, ""));
-                          return;
-                        }
-                        setSymptom(symptom.concat(item + " "));
+                        // if (symptom.includes(item)) {
+                        //   setSymptom(symptom.replace(item, ""));
+                        //   return;
+                        // }
+                        // setSymptom(symptom.concat(item + " "));
+                        setSymptom(item); //이거 복수 선택 x 나중에 바뀔수도 있으니까 일단은 메모
                       }}
                     >
                       <Text style={styles.menuText}>{item}</Text>
@@ -71,8 +94,14 @@ const Recommend = () => {
                 console.log(symptom);
                 axios
                   .get(`/node/pill/symptom?symptom=${symptom}`)
-                  .then((res) => setResult(result.concat(res.data.data.pill)))
-                  .then(console.log(result))
+                  .then((res) => {
+                    setIsSearched(true);
+                    console.log(res.data.data.pill);
+                    if (resultList.length === 0)
+                      setResultList(resultList.concat(res.data.data.pill));
+                  })
+
+                  // .then(console.log(res.data.data.pill))
                   // .then(
                   //   navigation.navigate("검색페이지", {
                   //     screen: "검색페이지",
@@ -86,6 +115,23 @@ const Recommend = () => {
 
               <Text style={styles.buttonText}>확인</Text>
             </TouchableOpacity>
+            {isSearched && (
+              <View style={styles.selectResultContent}>
+                <ScrollView nestedScrollEnabled>
+                  {resultList.map((data, index) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          // onPress(data);
+                        }}
+                      >
+                        <Content result={data} key={index} isSelect />
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )}
           </View>
         )}
       </View>
@@ -134,6 +180,12 @@ const styles = StyleSheet.create({
     borderColor: "#a4ccff",
     justifyContent: "center",
     alignItems: "center",
+  },
+  selectResultContent: {
+    // width: "120%",
+    flex: 1,
+    backgroundColor: "pink",
+    //backgroundColor: "pink",
   },
   dropDown: {
     alignSelf: "center", //이건 원래 end였는데 왜 이렇게 했떠라
@@ -199,5 +251,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  scroll: {},
 });
