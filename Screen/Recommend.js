@@ -6,33 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { SYMTOMS } from "../Datas/Symptoms";
 import { Content } from "./Search";
-
-const resultView = () => {
-  return (
-    <View style={styles.selectResultContent}>
-      <ScrollView nestedScrollEnabled>
-        {resultList.map((data, index) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                // onPress(data);
-              }}
-            >
-              <Content result={data} key={index} isSelect />
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </View>
-  );
-};
 
 const Recommend = () => {
   const navigation = useNavigation();
@@ -41,9 +21,23 @@ const Recommend = () => {
   const [symptom, setSymptom] = useState("");
   const [resultList, setResultList] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
+  const [buttonShow, setButtonShow] = useState(true); //진짜 state 많은거 나중에.. 좀 고치자
 
   const onPress = () => {
     setIsShow(!isShow);
+  };
+
+  useEffect(() => {
+    setIsSearched(false);
+    setButtonShow(true);
+    setResultList([]);
+  }, [symptom]);
+
+  const goResult = (result) => {
+    navigation.navigate("검색페이지", {
+      screen: "검색페이지",
+      //  params: result,
+    });
   };
 
   return (
@@ -87,51 +81,51 @@ const Recommend = () => {
             </View>
           </View>
         ) : (
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.selectButton}
-              onPress={() => {
-                console.log(symptom);
-                axios
-                  .get(`/node/pill/symptom?symptom=${symptom}`)
-                  .then((res) => {
-                    setIsSearched(true);
-                    console.log(res.data.data.pill);
-                    if (resultList.length === 0)
-                      setResultList(resultList.concat(res.data.data.pill));
-                  })
-
-                  // .then(console.log(res.data.data.pill))
-                  // .then(
-                  //   navigation.navigate("검색페이지", {
-                  //     screen: "검색페이지",
-                  //     params: result,
-                  //   })
-                  // )
-                  .catch((err) => console.log(err));
-              }}
-            >
-              {/* 이거 눌렀을 때 서버 통신 {symptom}  */}
-
-              <Text style={styles.buttonText}>확인</Text>
-            </TouchableOpacity>
-            {isSearched && (
-              <View style={styles.selectResultContent}>
-                <ScrollView nestedScrollEnabled>
-                  {resultList.map((data, index) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => {
-                          // onPress(data);
-                        }}
-                      >
-                        <Content result={data} key={index} isSelect />
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
-              </View>
-            )}
+          buttonShow && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.selectButton}
+                onPress={() => {
+                  console.log(symptom);
+                  axios
+                    .get(`/node/pill/symptom?symptom=${symptom}`)
+                    .then((res) => {
+                      setButtonShow(false);
+                      setIsSearched(true);
+                      //console.log(res.data.data.pill);
+                      if (resultList.length === 0)
+                        setResultList(resultList.concat(res.data.data.pill));
+                    })
+                    // .then(console.log(res.data.data.pill))
+                    // .then(
+                    //   navigation.navigate("검색페이지", {
+                    //     screen: "검색페이지",
+                    //     params: result,
+                    //   })
+                    // )
+                    .catch((err) => console.log(err));
+                }}
+              >
+                <Text style={styles.buttonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        )}
+        {isSearched && (
+          <View style={styles.selectResultContainer}>
+            <ScrollView style={styles.selectResultContent} nestedScrollEnabled>
+              {resultList.map((data, index) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      goResult(data);
+                    }}
+                  >
+                    <Content result={data} key={index} isSelect />
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
           </View>
         )}
       </View>
@@ -182,10 +176,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectResultContent: {
-    // width: "120%",
-    flex: 1,
-    backgroundColor: "pink",
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "90%",
+    // height: 100, //가변 div
+    //  backgroundColor: "pink",
+    marginTop: 15,
     //backgroundColor: "pink",
+  },
+  selectResultContainer: {
+    flex: 1,
+    // backgroundColor: "orange",
+    width: "90%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderWidth: 2,
+    borderRadius: 15,
+    borderColor: "#dcebff",
+    marginTop: 15,
   },
   dropDown: {
     alignSelf: "center", //이건 원래 end였는데 왜 이렇게 했떠라
