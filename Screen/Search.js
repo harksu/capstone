@@ -42,12 +42,12 @@ const tempData = [
   },
 ];
 
-const tempResult = {
-  name: "타이레놀",
-  effect: "발열,두통,근육통,감기",
-  ingredient: "아세트아미노펜",
-  returnResult: true,
-};
+// const tempResult = {
+//   item_name: "타이레놀",
+//   ee_doc_data: "발열,두통,근육통,감기",
+//   materlal_name: "아세트아미노펜",
+//   returnResult: true,
+// };
 
 const Comment = ({ last, name, comment }) => {
   return (
@@ -99,9 +99,9 @@ export const Content = ({ result, isSelect }) => {
   );
 };
 
-const Search = () => {
+const Search = ({ route }) => {
   const navigation = useNavigation();
-
+  const [item] = useState(route.params.params);
   const [pageNum, setPageNum] = useState(1);
   const onLeft = () => {
     if (pageNum === 1) return;
@@ -117,16 +117,13 @@ const Search = () => {
       <ScrollView style={styles.itemContainer}>
         <Header />
         <View style={styles.selectContainer}>
-          <Image
-            style={styles.image}
-            source={require("../assets/tylenol.png")}
-          />
+          <Image style={styles.image} source={{ uri: item.link }} />
         </View>
         <View style={styles.imageContainer}>
           <Text style={styles.imageText}>500</Text>
           <Image source={require("../assets/titleBlueCapsule.png")} />
         </View>
-        <Content result={tempResult} />
+        <Content result={item} />
         <TouchableOpacity
           style={styles.commentContainer}
           onPress={() => {
@@ -141,7 +138,7 @@ const Search = () => {
             .map((data, index) => {
               return (
                 <Comment
-                  key={index}
+                  key={index + 2}
                   name={data.name}
                   comment={data.comment}
                   last={index}

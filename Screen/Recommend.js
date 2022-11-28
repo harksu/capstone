@@ -36,7 +36,7 @@ const Recommend = () => {
   const goResult = (result) => {
     navigation.navigate("검색페이지", {
       screen: "검색페이지",
-      //  params: result,
+      params: result,
     });
   };
 
@@ -92,7 +92,7 @@ const Recommend = () => {
                     .then((res) => {
                       setButtonShow(false);
                       setIsSearched(true);
-                      //console.log(res.data.data.pill);
+                      console.log(res.data.data.pill);
                       if (resultList.length === 0)
                         setResultList(resultList.concat(res.data.data.pill));
                     })

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import Footer from "../Components/Footer";
 
 const SignUp = () => {
@@ -86,7 +87,15 @@ const SignUp = () => {
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
+                console.log(userInfo);
                 //여기에서 axios 요청 보내면 됨
+                axios
+                  .post(`java/auth/signup`, {
+                    username: userInfo.id,
+                    password: userInfo.pw,
+                  })
+                  .then((res) => console.log(res))
+                  .catch((err) => console.log(err));
               }}
             />
             {passwordCheck === userInfo.pw ? (
