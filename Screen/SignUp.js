@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -90,12 +91,22 @@ const SignUp = () => {
                 console.log(userInfo);
                 //여기에서 axios 요청 보내면 됨
                 axios
-                  .post(`java/auth/signup`, {
+                  .post(`java/sign-up`, {
                     username: userInfo.id,
                     password: userInfo.pw,
                   })
-                  .then((res) => console.log(res))
-                  .catch((err) => console.log(err));
+                  .then((res) => {
+                    Alert.alert("회원 가입 되었습니다.");
+                    navigation.navigate("로그인페이지", {
+                      screen: "로그인페이지",
+                    });
+                  })
+                  .catch((err) => {
+                    const errCode = err.toJSON().status;
+                    // console.log(errCode);
+                    if (errCode === 409) Alert.alert("이미 가입된 회원입니다.");
+                    else if (errCode === 404) Alert.alert("잘못된 에러입니다.");
+                  });
               }}
             />
             {passwordCheck === userInfo.pw ? (

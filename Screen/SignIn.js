@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useState, useRef } from "react";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
 
@@ -92,7 +94,21 @@ const SignIn = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.loginButton}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            axios
+              .post(`java/sign-in`, {
+                username: userInfo.id,
+                password: userInfo.pw,
+              })
+              .then((res) => console.log(res.data.result.data.accessToken))
+              .catch((err) => {
+                const errCode = err.toJSON().status;
+                if (errCode === 404)
+                  Alert.alert("없는 회원입니다. 회원가입창으로 넘어갑니다.");
+              });
+          }}
+        >
           <Text style={styles.loginText}>로그인하기</Text>
         </TouchableOpacity>
       </View>
