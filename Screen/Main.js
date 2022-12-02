@@ -8,6 +8,7 @@ import Footer from "../Components/Footer";
 
 const Main = () => {
   const navigation = useNavigation();
+
   return (
     <LinearGradient
       colors={["#0974fa", "#ffffff"]}

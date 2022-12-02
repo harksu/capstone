@@ -7,7 +7,8 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 
@@ -102,15 +103,27 @@ export const Content = ({ result, isSelect }) => {
 const Search = ({ route }) => {
   const navigation = useNavigation();
   const [item] = useState(route.params.params);
+  const [commentList, setCommentList] = useState([]);
   const [pageNum, setPageNum] = useState(1);
   const onLeft = () => {
     if (pageNum === 1) return;
     setPageNum(pageNum - 1);
   };
   const onRight = () => {
-    if (parseInt(tempData.length) / 3 <= pageNum) return;
+    if (parseInt(commentList.length) / 3 <= pageNum) return;
     setPageNum(pageNum + 1);
   };
+
+  useEffect(() => {
+    axios
+      .get(`node/comment/${item.id}`)
+      .then((res) => {
+        const list = res.data.data.pill;
+        // console.log(list);
+        if (commentList.length === 0) setCommentList(commentList.concat(list));
+      }) //이거 나중에 댓글 리스트로 해놓으면 됨
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -129,17 +142,17 @@ const Search = ({ route }) => {
           onPress={() => {
             navigation.navigate("댓글페이지", {
               screen: "댓글페이지",
-              params: tempData,
+              params: { list: commentList, item: item },
             });
           }}
         >
-          {tempData
+          {commentList
             .filter((data, index) => parseInt((index + 3) / 3) === pageNum)
             .map((data, index) => {
               return (
                 <Comment
                   key={index + 2}
-                  name={data.name}
+                  name={data.userName}
                   comment={data.comment}
                   last={index}
                 />

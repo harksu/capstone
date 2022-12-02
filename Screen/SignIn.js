@@ -8,10 +8,13 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
+import { accessToken } from "../Atoms/atoms";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -20,6 +23,8 @@ const SignIn = () => {
     id: "",
     pw: "",
   });
+
+  const [token, setToken] = useRecoilState(accessToken);
   const pwRef = useRef();
   const pwCheckRef = useRef();
 
@@ -101,7 +106,14 @@ const SignIn = () => {
                 username: userInfo.id,
                 password: userInfo.pw,
               })
-              .then((res) => console.log(res.data.result.data.accessToken))
+              .then((res) => {
+                const accessToken = res.data.result.data.accessToken;
+                // console.log(typeof accessToken);
+                setToken(accessToken);
+                navigation.navigate("메인페이지", {
+                  screen: "메인페이지",
+                });
+              })
               .catch((err) => {
                 const errCode = err.toJSON().status;
                 if (errCode === 404)

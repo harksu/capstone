@@ -7,10 +7,15 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
+import { accessToken } from "../Atoms/atoms";
 
 const Comment = ({ last, name, comment }) => {
   return (
@@ -26,7 +31,13 @@ const Comment = ({ last, name, comment }) => {
   );
 };
 const CommentList = ({ route }) => {
-  const [list, setList] = useState(route.params.params);
+  useEffect(() => {}, [list]);
+  const navigation = useNavigation();
+  const token = useRecoilValue(accessToken);
+  // console.log(token);
+  // console.log(route.params.params.item);
+  const [id] = useState(route.params.params.item.id);
+  const [list, setList] = useState(route.params.params.list);
   const [pageNum, setPageNum] = useState(1);
   const onLeft = () => {
     if (pageNum === 1) return;
@@ -40,7 +51,31 @@ const CommentList = ({ route }) => {
   const [comment, setComment] = useState("");
 
   const onSubmit = () => {
-    setList(list.concat({ name: "유저 닉네임", comment: comment }));
+    if (!token) {
+      Alert.alert("로그인 먼저 부탁드립니다.");
+      navigation.navigate("로그인페이지", {
+        screen: "로그인페이지",
+      });
+      return;
+    }
+
+    // console.log(id);
+    // console.log(token.accessToken);
+    axios
+      .post(
+        `/node/comment/${id}`,
+
+        {
+          comment: comment,
+        },
+        {
+          headers: { accessToken: token },
+        }
+      )
+      .then((res) =>
+        setList(list.concat({ name: "유저 닉네임", comment: comment }))
+      )
+      .catch((err) => console.log(err.toJSON()));
     setComment("");
   };
 
@@ -56,7 +91,7 @@ const CommentList = ({ route }) => {
                 return (
                   <Comment
                     key={index}
-                    name={data.name}
+                    name={data.userName}
                     comment={data.comment}
                     last={index}
                   />

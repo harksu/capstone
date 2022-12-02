@@ -11,3 +11,10 @@ export const selectedItem = atom({
     second_ingredient: "재료이름2",
   },
 });
+
+export const accessToken = atom({
+  key: "accessToken",
+  default: {
+    accessToken: "",
+  },
+});
