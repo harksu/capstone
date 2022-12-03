@@ -8,13 +8,12 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
-import { accessToken } from "../Atoms/atoms";
+import { accessToken, userName } from "../Atoms/atoms";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -25,6 +24,7 @@ const SignIn = () => {
   });
 
   const [token, setToken] = useRecoilState(accessToken);
+  const setUserName = useSetRecoilState(userName);
   const pwRef = useRef();
   const pwCheckRef = useRef();
 
@@ -44,7 +44,6 @@ const SignIn = () => {
                 });
               }}
             >
-              {/* 이거 누를 때 로그인 페이지로 강제라우팅(첫번째 페이지로) */}
               <Image source={require("../assets/back.png")} />
             </TouchableOpacity>
           </View>
@@ -108,7 +107,7 @@ const SignIn = () => {
               })
               .then((res) => {
                 const accessToken = res.data.result.data.accessToken;
-                // console.log(typeof accessToken);
+                setUserName(userInfo.id);
                 setToken(accessToken);
                 navigation.navigate("메인페이지", {
                   screen: "메인페이지",

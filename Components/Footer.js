@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Alert } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
@@ -62,11 +62,14 @@ const Footer = () => {
       <View style={styles.footerBox}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("댓글페이지", {
-              screen: "댓글페이지",
-              params: tempData,
-            });
+            Alert.alert("현재 어떻게 할지 의논중입니다.");
           }}
+          // onPress={() => {
+          //   navigation.navigate("댓글페이지", {
+          //     screen: "댓글페이지",
+          //     params: tempData,
+          //   });
+          // }} -> 이거 나중에 어떻게 할 지 물어보기
         >
           <Image source={require("../assets/rightLogo.png")} />
         </TouchableOpacity>

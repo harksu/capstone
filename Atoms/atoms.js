@@ -14,7 +14,10 @@ export const selectedItem = atom({
 
 export const accessToken = atom({
   key: "accessToken",
-  default: {
-    accessToken: "",
-  },
+  default: "",
+});
+
+export const userName = atom({
+  key: "userName",
+  default: "",
 });

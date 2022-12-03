@@ -15,7 +15,7 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import { accessToken } from "../Atoms/atoms";
+import { accessToken, userName } from "../Atoms/atoms";
 
 const Comment = ({ last, name, comment }) => {
   return (
@@ -33,22 +33,24 @@ const Comment = ({ last, name, comment }) => {
 const CommentList = ({ route }) => {
   useEffect(() => {}, [list]);
   const navigation = useNavigation();
+
   const token = useRecoilValue(accessToken);
-  // console.log(token);
-  // console.log(route.params.params.item);
+  const name = useRecoilValue(userName);
+
   const [id] = useState(route.params.params.item.id);
   const [list, setList] = useState(route.params.params.list);
   const [pageNum, setPageNum] = useState(1);
+  const [comment, setComment] = useState("");
+
   const onLeft = () => {
     if (pageNum === 1) return;
     setPageNum(pageNum - 1);
   };
+
   const onRight = () => {
     if (parseInt(list.length) / 7 <= pageNum) return;
     setPageNum(pageNum + 1);
   };
-
-  const [comment, setComment] = useState("");
 
   const onSubmit = () => {
     if (!token) {
@@ -58,13 +60,9 @@ const CommentList = ({ route }) => {
       });
       return;
     }
-
-    // console.log(id);
-    // console.log(token.accessToken);
     axios
       .post(
         `/node/comment/${id}`,
-
         {
           comment: comment,
         },
@@ -72,9 +70,15 @@ const CommentList = ({ route }) => {
           headers: { accessToken: token },
         }
       )
-      .then((res) =>
-        setList(list.concat({ name: "유저 닉네임", comment: comment }))
-      )
+      .then((res) => {
+        axios
+          .get(`node/comment/${id}`)
+          .then((res) => {
+            const item = res.data.data.pill;
+            setList(item);
+          })
+          .catch((err) => console.log(err));
+      })
       .catch((err) => console.log(err.toJSON()));
     setComment("");
   };
@@ -98,7 +102,7 @@ const CommentList = ({ route }) => {
                 );
               })}
             <View style={styles.commentInput}>
-              <Text style={styles.nameText}>유저 닉네임</Text>
+              <Text style={styles.nameText}>{name}</Text>
               <TextInput
                 onChangeText={setComment}
                 value={comment}
@@ -209,7 +213,6 @@ const styles = StyleSheet.create({
   pageContainer: {
     width: 100,
     height: 30,
-    // backgroundColor: "pink",
     marginLeft: "auto",
     marginRight: "auto",
     marginBottom: 26,

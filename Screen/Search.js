@@ -7,48 +7,11 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-
-const tempData = [
-  {
-    name: "임학수",
-    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학순",
-    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학수악",
-    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학순악",
-    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술악",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술악",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-];
-
-// const tempResult = {
-//   item_name: "타이레놀",
-//   ee_doc_data: "발열,두통,근육통,감기",
-//   materlal_name: "아세트아미노펜",
-//   returnResult: true,
-// };
 
 const Comment = ({ last, name, comment }) => {
   return (
@@ -102,6 +65,7 @@ export const Content = ({ result, isSelect }) => {
 
 const Search = ({ route }) => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [item] = useState(route.params.params);
   const [commentList, setCommentList] = useState([]);
   const [pageNum, setPageNum] = useState(1);
@@ -115,15 +79,16 @@ const Search = ({ route }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`node/comment/${item.id}`)
-      .then((res) => {
-        const list = res.data.data.pill;
-        // console.log(list);
-        if (commentList.length === 0) setCommentList(commentList.concat(list));
-      }) //이거 나중에 댓글 리스트로 해놓으면 됨
-      .catch((err) => console.log(err));
-  }, []);
+    if (isFocused) {
+      axios
+        .get(`node/comment/${item.id}`)
+        .then((res) => {
+          const list = res.data.data.pill;
+          setCommentList(list);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
@@ -146,6 +111,11 @@ const Search = ({ route }) => {
             });
           }}
         >
+          {commentList.length === 0 && (
+            <Text style={styles.imageText}>
+              클릭해서 새로운 의견을 작성해주세요!
+            </Text>
+          )}
           {commentList
             .filter((data, index) => parseInt((index + 3) / 3) === pageNum)
             .map((data, index) => {
@@ -185,7 +155,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1.1,
     position: "relative",
-    //backgroundColor: "orange",
   },
   selectContainer: {
     width: "75%",
@@ -193,13 +162,11 @@ const styles = StyleSheet.create({
     marginTop: 60, //헤더포함해서 마진을 적용시키긴했는데 이게 맞는건가 ..?
     marginLeft: "auto",
     marginRight: "auto",
-    //backgroundColor: "pink",
     justifyContent: "space-between",
     borderWidth: 1,
     borderColor: "#cfcfcf",
   },
   contentContainer: {
-    //검색 페이지용
     width: "75%",
     height: 100,
     marginTop: 3.5,
@@ -212,7 +179,6 @@ const styles = StyleSheet.create({
   },
   selectContentContainer: {
     width: "90%",
-    // height: 100, //가변 div
     marginTop: 15,
     marginLeft: "auto",
     marginRight: "auto",
@@ -229,7 +195,6 @@ const styles = StyleSheet.create({
     marginTop: 26,
     marginLeft: "auto",
     marginRight: "auto",
-    //backgroundColor: "blue",
     alignItems: "center",
   },
   commentContainer: {
@@ -245,7 +210,6 @@ const styles = StyleSheet.create({
   pageContainer: {
     width: 100,
     height: 30,
-    // backgroundColor: "pink",
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 26,
@@ -267,7 +231,6 @@ const styles = StyleSheet.create({
     height: "33.3%",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "red",
   },
   commentText: {
     fontSize: 10,
@@ -286,13 +249,11 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     fontFamily: "Tmoney",
     marginRight: 5,
+    textAlign: "center",
   },
   content: {
-    // backgroundColor: "pink",
     flex: 1,
-    //alignItems: "stretch",
     width: "93%",
-    // height: "80%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -300,13 +261,10 @@ const styles = StyleSheet.create({
   contentImage: {
     width: "25%",
     height: "60%",
-    // backgroundColor: "yellow",
   },
   contentExplain: {
     flex: 1,
     width: "70%",
-    // height: "70%",
-    //backgroundColor: "red",
   },
   contentText: {
     fontSize: 10,
@@ -320,7 +278,6 @@ const styles = StyleSheet.create({
     width: "100%",
     hegiht: "100%",
     resizeMode: "cover",
-    //backgroundColor: "pink",
   },
   commentContent: {
     flexDirection: "row",
