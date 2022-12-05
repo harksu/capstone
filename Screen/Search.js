@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
@@ -28,9 +29,16 @@ const Comment = ({ last, name, comment }) => {
 };
 export const Content = ({ result, isSelect }) => {
   const { item_name, ee_doc_data, materlal_name, link } = result;
-  const ingredient = materlal_name.split("|")[1].substring(6); // 필터링
-  const effect = ee_doc_data.replace("[", "").replace("]", "");
-  const itemName = item_name.split("(")[0];
+  const itemName = item_name.split("(")[0].substr(0, 10);
+  const effect =
+    ee_doc_data.replace("[", "").replace("]", "").split(",")[0] +
+    "," +
+    ee_doc_data.replace("[", "").replace("]", "").split(",")[1] +
+    "...";
+  const ingredient =
+    materlal_name.split("|")[1].substring(6).length < 15
+      ? materlal_name.split("|")[1].substring(6)
+      : materlal_name.split("|")[1].substring(6).substr(0, 15) + "..."; // 필터링인데 이게 좀 애매하..
   const imgSrc = { uri: link };
   return (
     <View
@@ -86,7 +94,7 @@ const Search = ({ route }) => {
           const list = res.data.data.pill;
           setCommentList(list);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => Alert.alert("해당하는 댓글이 없습니다."));
     }
   }, [isFocused]);
 

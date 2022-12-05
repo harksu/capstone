@@ -17,9 +17,11 @@ import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { accessToken, userName } from "../Atoms/atoms";
 
-const Comment = ({ last, name, comment }) => {
+const Comment = ({ last, name, comment, id, token }) => {
   return (
-    <View style={[(last + 1) % 7 === 0 ? styles.lastComment : styles.comment]}>
+    <TouchableOpacity
+      style={[(last + 1) % 7 === 0 ? styles.lastComment : styles.comment]}
+    >
       <View style={styles.commentInner}>
         <Text style={styles.commentText}>{name}</Text>
         <View style={styles.commentContent}>
@@ -27,7 +29,7 @@ const Comment = ({ last, name, comment }) => {
           <Text style={styles.commentText}>{comment}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 const CommentList = ({ route }) => {
@@ -79,7 +81,11 @@ const CommentList = ({ route }) => {
           })
           .catch((err) => console.log(err));
       })
-      .catch((err) => console.log(err.toJSON()));
+      .catch((err) => {
+        const errCode = err.toJSON().status;
+        console.log(errCode);
+        Alert.alert("ID와 의견 내용을 확인해주세요");
+      });
     setComment("");
   };
 
@@ -98,6 +104,8 @@ const CommentList = ({ route }) => {
                     name={data.userName}
                     comment={data.comment}
                     last={index}
+                    id={id}
+                    token={token}
                   />
                 );
               })}
@@ -221,3 +229,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+// 혹시 모를 댓글 삭제 대비
+// onPress={() => {
+//   console.log(id, token);
+//   Alert.alert(
+//     "삭제",
+//     "댓글을 삭제할까요?",
+//     [
+//       {
+//         text: "취소",
+//         onPress: () => {
+//           console.log("취소");
+//         },
+//       },
+//       {
+//         text: "삭제",
+//         onPress: () => {
+//           axios
+//             .delete(`node/comment/${id}`, {
+//               headers: {
+//                 access_token: token,
+//               },
+//             })
+//             .then((res) => console.log(res))
+//             .catch((err) => console.log(err));
+//         },
+//       },
+//     ],
+//     {
+//       cancelable: true,
+//       onDismiss: () => {},
+//     }
+//   );
+// }}

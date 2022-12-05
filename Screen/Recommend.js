@@ -86,23 +86,15 @@ const Recommend = () => {
               <TouchableOpacity
                 style={styles.selectButton}
                 onPress={() => {
-                  console.log(symptom);
                   axios
                     .get(`/node/pill/symptom?symptom=${symptom}`)
                     .then((res) => {
                       setButtonShow(false);
                       setIsSearched(true);
-                      console.log(res.data.data.pill);
+                      // console.log(res.data.data.pill);
                       if (resultList.length === 0)
                         setResultList(resultList.concat(res.data.data.pill));
                     })
-                    // .then(console.log(res.data.data.pill))
-                    // .then(
-                    //   navigation.navigate("검색페이지", {
-                    //     screen: "검색페이지",
-                    //     params: result,
-                    //   })
-                    // )
                     .catch((err) => console.log(err));
                 }}
               >

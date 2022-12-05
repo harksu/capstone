@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { RecoilRoot } from "recoil";
 import axios from "axios";
@@ -14,7 +13,7 @@ import CommentList from "./Screen/CommentList";
 import Select from "./Screen/Select";
 import Result from "./Screen/Result";
 
-axios.defaults.baseURL = "http://3.35.231.183"; //이거 나중에 도메인으로 변경
+axios.defaults.baseURL = "http://misson24.com";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,5 +46,3 @@ export default function App() {
     </RecoilRoot>
   );
 }
-
-const styles = StyleSheet.create({});

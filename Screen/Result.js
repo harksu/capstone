@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
@@ -33,11 +33,18 @@ const Result = () => {
     second_ingredient,
   } = picked;
   useEffect(() => {
-    console.log("병용금기");
     axios
       .get(`pill_a=${first}&pill_b=${second}`)
-      .then((res) => console.log(res))
-      .catch((err) => setIsResult("같이 복용하실 수 있습니다."));
+      .then((res) => {
+        console.log(res);
+        setAlert("주의사항이 있습니다");
+      })
+      .catch((err) => {
+        console.log(err);
+        const errCode = err.toJSON().status;
+        if (errCode === 404) setIsResult("같이 복용하실 수 있습니다.");
+        else Alert.alert(err);
+      });
   });
   return (
     <View style={styles.container}>
@@ -46,18 +53,19 @@ const Result = () => {
         <View style={styles.contentContainer}>
           {tempImageList.map((data, index) => {
             const link = index === 0 ? first_link : second_link;
+
             return <ImageItem index={index} key={index} src={link} />;
           })}
-          <View style={styles.resultTextContainer}>
+          <ScrollView style={styles.resultTextContainer}>
             <Text style={styles.nameText}>
               {first} 성분 : {first_ingredient} {"\n"}
               {second} 성분 : {second_ingredient}
             </Text>
             <Text style={styles.resultText}>
               {first} 과 {second}는 {isResult}
-              {"\n"}주의사항 : {alert ? "이건결과값" : "없습니다."}
+              {"\n"}주의사항 : {alert ? alert : "없습니다."}
             </Text>
-          </View>
+          </ScrollView>
         </View>
       </View>
       <Footer />
@@ -118,10 +126,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 23,
     fontFamily: "Tmoney",
     color: "#0974fa",
+    //flex: ,
   },
   resultText: {
     fontSize: 12,
@@ -129,5 +138,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontFamily: "Tmoney",
     color: "#0974fa",
+    //flex: 1,
   },
 });

@@ -51,7 +51,7 @@ const SignUp = () => {
               style={styles.input}
               onChangeText={(input) => setUserInfo({ ...userInfo, id: input })}
               value={userInfo.id}
-              //autoFocus={true} 이거 나중에 키자 정신 없다.
+              autoFocus={true}
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 pwRef.current.focus();
@@ -88,8 +88,6 @@ const SignUp = () => {
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
-                console.log(userInfo);
-                //여기에서 axios 요청 보내면 됨
                 axios
                   .post(`java/sign-up`, {
                     username: userInfo.id,
@@ -103,7 +101,6 @@ const SignUp = () => {
                   })
                   .catch((err) => {
                     const errCode = err.toJSON().status;
-                    // console.log(errCode);
                     if (errCode === 409) Alert.alert("이미 가입된 회원입니다.");
                     else if (errCode === 404) Alert.alert("잘못된 에러입니다.");
                   });
@@ -137,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "row",
     marginLeft: -10,
-    // backgroundColor: "pink",
   },
   itemContainer: {
     flex: 1.1,
