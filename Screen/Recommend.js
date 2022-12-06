@@ -51,7 +51,10 @@ const Recommend = () => {
               {symptom ? symptom : "증상을 선택해주세요"}
             </Text>
             <TouchableOpacity onPressIn={onPress}>
-              <Image source={require("../assets/drop.png")} />
+              <Image
+                source={require("../assets/drop.png")}
+                style={[isShow && { transform: [{ rotate: "180deg" }] }]}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -63,7 +66,7 @@ const Recommend = () => {
                   return (
                     <TouchableOpacity
                       style={styles.menuItem}
-                      key={index}
+                      key={item}
                       onPressIn={() => {
                         // if (symptom.includes(item)) {
                         //   setSymptom(symptom.replace(item, ""));
@@ -91,7 +94,6 @@ const Recommend = () => {
                     .then((res) => {
                       setButtonShow(false);
                       setIsSearched(true);
-                      // console.log(res.data.data.pill);
                       if (resultList.length === 0)
                         setResultList(resultList.concat(res.data.data.pill));
                     })
@@ -113,7 +115,7 @@ const Recommend = () => {
                       goResult(data);
                     }}
                   >
-                    <Content result={data} key={index} isSelect />
+                    <Content result={data} key={data.item_seq} isSelect />
                   </TouchableOpacity>
                 );
               })}

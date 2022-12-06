@@ -49,7 +49,7 @@ const Item = ({ name, number }) => {
     //이게 베스트 로직은 아닌 것 같은데
   }, [itemName]);
 
-  const testAxios = () => {
+  const getItemList = () => {
     axios
       .get(`/node/pill/name?name=${itemName}`)
       .then((res) => {
@@ -92,7 +92,7 @@ const Item = ({ name, number }) => {
                         onPress(data);
                       }}
                     >
-                      <Content result={data} key={index} isSelect />
+                      <Content result={data} key={data.item_seq} isSelect />
                     </TouchableOpacity>
                   );
                 })}
@@ -123,7 +123,7 @@ const Item = ({ name, number }) => {
           style={styles.selectButton}
           onPress={() => {
             setIsSearched(true);
-            testAxios();
+            getItemList();
           }}
         >
           <Text style={styles.buttonText}>검색</Text>
@@ -147,7 +147,7 @@ const Select = () => {
             <Text style={styles.titleText}>알약 선택하기</Text>
             {itemList.map((data, index) => {
               var name = `약${index + 1}`;
-              const keyValue = `${name} ${index}`;
+              const keyValue = `${name}${index}`;
               if (picked) {
                 name = index === 0 ? picked.first : picked.second;
               }

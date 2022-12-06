@@ -1,40 +1,13 @@
 import { StyleSheet, View, TouchableOpacity, Image, Alert } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-
-const tempData = [
-  {
-    name: "임학수",
-    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학순",
-    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학수악",
-    comment: " 헉...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학순악",
-    comment: " 험...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술악",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-  {
-    name: "임학술악",
-    comment: " 헐...! 타이레놀이 역시 근본이죠!!!!",
-  },
-];
 
 const Footer = () => {
   const navigation = useNavigation();
+  const [list, setList] = useState([]);
+
+  const tempitem = { id: 4500 };
   return (
     <View style={styles.footer}>
       <View style={styles.footerBox}>
@@ -63,13 +36,21 @@ const Footer = () => {
         <TouchableOpacity
           onPress={() => {
             Alert.alert("현재 어떻게 할지 의논중입니다.");
+            axios
+              .get(`node/comment/4500`)
+              //이걸 나중에 id로 바꾸고 파라미터에도 item으로 바꾸면 되는건데
+              .then((res) => {
+                const item = res.data.data.pill;
+                setList(item);
+              })
+              .then(
+                navigation.navigate("댓글페이지", {
+                  screen: "댓글페이지",
+                  params: { list: list, item: tempitem },
+                })
+              )
+              .catch((err) => console.log(err));
           }}
-          // onPress={() => {
-          //   navigation.navigate("댓글페이지", {
-          //     screen: "댓글페이지",
-          //     params: tempData,
-          //   });
-          // }} -> 이거 나중에 어떻게 할 지 물어보기
         >
           <Image source={require("../assets/rightLogo.png")} />
         </TouchableOpacity>

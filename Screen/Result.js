@@ -14,12 +14,17 @@ const ImageItem = ({ index, src }) => {
     <View
       style={[index === 0 ? styles.firstImageContainer : styles.ImageContainer]}
     >
-      <Image style={styles.image} source={{ uri: src }} />
+      {src === null ? (
+        <Image style={styles.image} source={require(`../assets/noimage.png`)} />
+      ) : (
+        <Image style={styles.image} source={{ uri: src }} />
+      )}
     </View>
   );
 };
 
 const tempImageList = [tylenol, noImage];
+
 const Result = () => {
   const [isResult, setIsResult] = useState("");
   const [alert, setAlert] = useState("");
@@ -40,7 +45,6 @@ const Result = () => {
         setAlert("주의사항이 있습니다");
       })
       .catch((err) => {
-        console.log(err);
         const errCode = err.toJSON().status;
         if (errCode === 404) setIsResult("같이 복용하실 수 있습니다.");
         else Alert.alert(err);
@@ -53,7 +57,6 @@ const Result = () => {
         <View style={styles.contentContainer}>
           {tempImageList.map((data, index) => {
             const link = index === 0 ? first_link : second_link;
-
             return <ImageItem index={index} key={index} src={link} />;
           })}
           <ScrollView style={styles.resultTextContainer}>
