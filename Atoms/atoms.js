@@ -21,3 +21,8 @@ export const userName = atom({
   key: "userName",
   default: "",
 });
+
+export const isDelete = atom({
+  key: "isDelete",
+  default: false,
+});

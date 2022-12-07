@@ -13,7 +13,7 @@ import CommentList from "./Screen/CommentList";
 import Select from "./Screen/Select";
 import Result from "./Screen/Result";
 
-axios.defaults.baseURL = "http://misson24.com";
+axios.defaults.baseURL = "http://misson24.com/";
 
 const Stack = createNativeStackNavigator();
 

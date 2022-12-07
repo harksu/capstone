@@ -10,16 +10,70 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import { accessToken, userName } from "../Atoms/atoms";
+import { accessToken, userName, isDelete } from "../Atoms/atoms";
 
-const Comment = ({ last, name, comment, id, token }) => {
+const Comment = ({ last, name, comment, id, token, commentID }) => {
+  const navigation = useNavigation();
+  const deleteState = useRecoilValue(isDelete);
+  const setDelete = useSetRecoilState(isDelete);
   return (
     <TouchableOpacity
+      onPress={() => {
+        if (!token) {
+          Alert.alert("로그인 먼저 부탁드립니다.");
+          navigation.navigate("로그인페이지", {
+            screen: "로그인페이지",
+          });
+          return;
+        }
+        Alert.alert(
+          "삭제",
+          "댓글을 삭제할까요?",
+          [
+            {
+              text: "취소",
+            },
+            {
+              text: "삭제",
+              onPress: () => {
+                if (id === -1) {
+                  Alert.alert(
+                    "해당 페이지는 조회만 가능합니다. 검색 페이지로 이동합니다."
+                  );
+                  navigation.navigate("추천페이지", {
+                    screen: "추천페이지",
+                  });
+                  return;
+                }
+                axios
+                  .delete(`node/comment/${commentID}`, {
+                    headers: {
+                      accesstoken: token,
+                    },
+                  })
+                  .then((res) => {
+                    setDelete(!deleteState);
+                  })
+                  .catch((err) => {
+                    Alert.alert(err.message);
+                    navigation.navigate("메인페이지", {
+                      screen: "메인페이지",
+                    });
+                  });
+              },
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+      }}
       style={[(last + 1) % 7 === 0 ? styles.lastComment : styles.comment]}
     >
       <View style={styles.commentInner}>
@@ -33,16 +87,28 @@ const Comment = ({ last, name, comment, id, token }) => {
   );
 };
 const CommentList = ({ route }) => {
-  useEffect(() => {}, [list]);
   const navigation = useNavigation();
 
   const token = useRecoilValue(accessToken);
   const name = useRecoilValue(userName);
+  const deleteState = useRecoilValue(isDelete);
 
   const [id] = useState(route.params.params.item.id);
   const [list, setList] = useState(route.params.params.list);
   const [pageNum, setPageNum] = useState(1);
   const [comment, setComment] = useState("");
+
+  useEffect(() => {}, [list]);
+
+  useEffect(() => {
+    axios
+      .get(`node/comment/${id}`)
+      .then((res) => {
+        const item = res.data.data.pill;
+        setList(item);
+      })
+      .catch((err) => console.log(err.response));
+  }, [deleteState]);
 
   const onLeft = () => {
     if (pageNum === 1) return;
@@ -55,6 +121,14 @@ const CommentList = ({ route }) => {
   };
 
   const onSubmit = () => {
+    if (id === -1) {
+      Alert.alert("해당 페이지는 조회만 가능합니다. 검색 페이지로 이동합니다.");
+      navigation.navigate("추천페이지", {
+        screen: "추천페이지",
+      });
+      return;
+    }
+
     if (!token) {
       Alert.alert("로그인 먼저 부탁드립니다.");
       navigation.navigate("로그인페이지", {
@@ -106,6 +180,7 @@ const CommentList = ({ route }) => {
                     last={index}
                     id={id}
                     token={token}
+                    commentID={data.id}
                   />
                 );
               })}
@@ -229,37 +304,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-// 혹시 모를 댓글 삭제 대비
-// onPress={() => {
-//   console.log(id, token);
-//   Alert.alert(
-//     "삭제",
-//     "댓글을 삭제할까요?",
-//     [
-//       {
-//         text: "취소",
-//         onPress: () => {
-//           console.log("취소");
-//         },
-//       },
-//       {
-//         text: "삭제",
-//         onPress: () => {
-//           axios
-//             .delete(`node/comment/${id}`, {
-//               headers: {
-//                 access_token: token,
-//               },
-//             })
-//             .then((res) => console.log(res))
-//             .catch((err) => console.log(err));
-//         },
-//       },
-//     ],
-//     {
-//       cancelable: true,
-//       onDismiss: () => {},
-//     }
-//   );
-// }}

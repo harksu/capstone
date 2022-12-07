@@ -129,10 +129,11 @@ const Search = ({ route }) => {
             .map((data, index) => {
               return (
                 <Comment
-                  key={index + 2}
+                  key={data.id}
                   name={data.userName}
                   comment={data.comment}
                   last={index}
+                  commentID={data.id}
                 />
               );
             })}

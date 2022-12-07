@@ -1,13 +1,12 @@
 import { StyleSheet, View, TouchableOpacity, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 const Footer = () => {
   const navigation = useNavigation();
-  const [list, setList] = useState([]);
 
-  const tempitem = { id: 4500 };
+  const tempitem = { id: -1 };
   return (
     <View style={styles.footer}>
       <View style={styles.footerBox}>
@@ -35,20 +34,15 @@ const Footer = () => {
       <View style={styles.footerBox}>
         <TouchableOpacity
           onPress={() => {
-            Alert.alert("현재 어떻게 할지 의논중입니다.");
             axios
-              .get(`node/comment/4500`)
-              //이걸 나중에 id로 바꾸고 파라미터에도 item으로 바꾸면 되는건데
+              .get(`node/comment`)
               .then((res) => {
-                const item = res.data.data.pill;
-                setList(item);
-              })
-              .then(
+                const item = res.data.data;
                 navigation.navigate("댓글페이지", {
                   screen: "댓글페이지",
-                  params: { list: list, item: tempitem },
-                })
-              )
+                  params: { list: item, item: tempitem },
+                });
+              })
               .catch((err) => console.log(err));
           }}
         >
