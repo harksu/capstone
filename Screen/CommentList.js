@@ -43,10 +43,10 @@ const Comment = ({ last, name, comment, id, token, commentID }) => {
               onPress: () => {
                 if (id === -1) {
                   Alert.alert(
-                    "해당 페이지는 조회만 가능합니다. 검색 페이지로 이동합니다."
+                    "해당 페이지는 조회만 가능합니다. 메인 페이지로 이동합니다."
                   );
-                  navigation.navigate("추천페이지", {
-                    screen: "추천페이지",
+                  navigation.navigate("메인페이지", {
+                    screen: "메인페이지",
                   });
                   return;
                 }
@@ -101,6 +101,7 @@ const CommentList = ({ route }) => {
   useEffect(() => {}, [list]);
 
   useEffect(() => {
+    if (id === -1) return;
     axios
       .get(`node/comment/${id}`)
       .then((res) => {
@@ -122,9 +123,9 @@ const CommentList = ({ route }) => {
 
   const onSubmit = () => {
     if (id === -1) {
-      Alert.alert("해당 페이지는 조회만 가능합니다. 검색 페이지로 이동합니다.");
-      navigation.navigate("추천페이지", {
-        screen: "추천페이지",
+      Alert.alert("해당 페이지는 조회만 가능합니다. 메인 페이지로 이동합니다.");
+      navigation.navigate("메인페이지", {
+        screen: "메인페이지",
       });
       return;
     }
@@ -184,24 +185,26 @@ const CommentList = ({ route }) => {
                   />
                 );
               })}
-            <View style={styles.commentInput}>
-              <Text style={styles.nameText}>{name}</Text>
-              <TextInput
-                onChangeText={setComment}
-                value={comment}
-                placeholder="의견을 작성해주세요"
-                style={{ padding: 5, fontSize: 12, lineHeight: 15 }}
-                onSubmitEditing={() => {
-                  Keyboard.dismiss();
-                }}
-              ></TextInput>
-              <TouchableOpacity
-                style={styles.submitContainer}
-                onPress={onSubmit}
-              >
-                <Text style={styles.submitText}>작성하기</Text>
-              </TouchableOpacity>
-            </View>
+            {id !== -1 && (
+              <View style={styles.commentInput}>
+                <Text style={styles.nameText}>{name}</Text>
+                <TextInput
+                  onChangeText={setComment}
+                  value={comment}
+                  placeholder="의견을 작성해주세요"
+                  style={{ padding: 5, fontSize: 12, lineHeight: 15 }}
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss();
+                  }}
+                ></TextInput>
+                <TouchableOpacity
+                  style={styles.submitContainer}
+                  onPress={onSubmit}
+                >
+                  <Text style={styles.submitText}>작성하기</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           <View style={styles.pageContainer}>
             <TouchableOpacity onPressIn={onLeft}>

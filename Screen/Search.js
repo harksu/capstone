@@ -35,10 +35,12 @@ export const Content = ({ result, isSelect }) => {
     "," +
     ee_doc_data.replace("[", "").replace("]", "").split(",")[1] +
     "...";
-  const ingredient =
-    materlal_name.split("|")[1].substring(6).length < 15
+
+  const ingredient = materlal_name
+    ? materlal_name.split("|")[1].substring(6).length < 15
       ? materlal_name.split("|")[1].substring(6)
-      : materlal_name.split("|")[1].substring(6).substr(0, 15) + "..."; // 필터링인데 이게 좀 애매하..
+      : materlal_name.split("|")[1].substring(6).substr(0, 15) + "..."
+    : "데이터를 찾을 수 없습니다"; // 필터링인데 이게 좀 애매하..
   const imgSrc = { uri: link };
   return (
     <View

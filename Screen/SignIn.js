@@ -72,6 +72,7 @@ const SignIn = () => {
               onChangeText={(input) => setUserInfo({ ...userInfo, pw: input })}
               value={userInfo.pw}
               ref={pwRef}
+              secureTextEntry={true}
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 // pwCheckRef.current.focus(); 이게 왜 있는거지 ?

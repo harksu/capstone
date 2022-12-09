@@ -65,6 +65,7 @@ const SignUp = () => {
               onChangeText={(input) => setUserInfo({ ...userInfo, pw: input })}
               value={userInfo.pw}
               ref={pwRef}
+              secureTextEntry={true}
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 pwCheckRef.current.focus();
@@ -85,6 +86,7 @@ const SignUp = () => {
               onChangeText={setPasswordCheck}
               value={passwordCheck}
               ref={pwCheckRef}
+              secureTextEntry={true}
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
