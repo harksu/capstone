@@ -26,11 +26,16 @@
         "backgroundColor": "#FFFFFF"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "versionCode": 1, 
-      "package": "SafePill"
+      "versionCode": 1,
+      "package": "com.harksulim.capstone2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eee02298-b7cd-41ec-887c-bdf8940b8ff3"
+      }
     }
   }
 }
