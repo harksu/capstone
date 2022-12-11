@@ -4,8 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../Components/Footer";
 
-//이거 나중에 component로 찢으면 좋은데
-
 const Main = () => {
   const navigation = useNavigation();
 
@@ -76,14 +74,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 40,
     flex: 1,
-    width: "85%", //피그마 기준 계산값
+    width: "85%",
     hegiht: 300,
   },
   button: {
     width: 150,
     height: 150,
     backgroundColor: "white",
-    marginTop: 35, //일단 임의로 35로 저장
+    marginTop: 35,
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,

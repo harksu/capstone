@@ -7,8 +7,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../Components/Header";
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
   selectContainer: {
     width: "75%",
     height: 200,
-    marginTop: 60, //헤더포함해서 마진을 적용시키긴했는데 이게 맞는건가 ..?
+    marginTop: 60,
     marginLeft: "auto",
     marginRight: "auto",
     justifyContent: "space-between",

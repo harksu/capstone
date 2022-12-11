@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 0.1,
     position: "relative",
-    // backgroundColor: "red",
   },
   back: {
     flex: 0.2,
@@ -37,8 +36,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "space-between",
-    // backgroundColor: "pink",
-    top: 15, //10으로 할까 20으로 할까
+    top: 15,
     left: 10,
     height: 28,
     width: 140,

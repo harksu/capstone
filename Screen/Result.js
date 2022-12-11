@@ -39,10 +39,10 @@ const Result = () => {
   } = picked;
   useEffect(() => {
     axios
-      .get(`pill_a=${first}&pill_b=${second}`)
+      .get(`java/contraindicate?pill_a=${first}&pill_b=${second}`)
       .then((res) => {
-        console.log(res);
-        setAlert("주의사항이 있습니다");
+        setIsResult("같이 복용하실 수 없습니다.");
+        setAlert(res.data.result.data);
       })
       .catch((err) => {
         const errCode = err.toJSON().status;
@@ -61,8 +61,10 @@ const Result = () => {
           })}
           <ScrollView style={styles.resultTextContainer}>
             <Text style={styles.nameText}>
-              {first} 성분 : {first_ingredient} {"\n"}
-              {second} 성분 : {second_ingredient}
+              {first}
+              {"\n"}성분 : {first_ingredient} {"\n"}
+              {second}
+              {"\n"}성분 : {second_ingredient}
             </Text>
             <Text style={styles.resultText}>
               {first} 과 {second}는 {isResult}
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   contentContainer: {
-    height: "90%", //원래 85인데 90ㅇ ㅣ더 이쁨
+    height: "90%",
     width: "75%",
     marginLeft: "auto",
     marginRight: "auto",
@@ -118,7 +120,6 @@ const styles = StyleSheet.create({
   resultTextContainer: {
     width: "88%",
     height: "20%",
-    //backgroundColor: "pink",
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 50,
@@ -133,7 +134,6 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     fontFamily: "Tmoney",
     color: "#0974fa",
-    //flex: ,
   },
   resultText: {
     fontSize: 12,
@@ -141,6 +141,5 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontFamily: "Tmoney",
     color: "#0974fa",
-    //flex: 1,
   },
 });

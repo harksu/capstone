@@ -25,7 +25,7 @@ const Item = ({ name, number }) => {
   const [picked, setPicked] = useRecoilState(selectedItem);
 
   const onPress = (data) => {
-    const ingredient = data.materlal_name.split("|")[1].substring(6); // 필터링
+    const ingredient = data.materlal_name.split("|")[1].substring(6);
     if (number === 0) {
       setPicked({
         ...picked,
@@ -46,7 +46,6 @@ const Item = ({ name, number }) => {
 
   useEffect(() => {
     setResultList([]);
-    //이게 베스트 로직은 아닌 것 같은데
   }, [itemName]);
 
   const getItemList = () => {
@@ -110,7 +109,6 @@ const Item = ({ name, number }) => {
             placeholder={name}
             style={styles.Text}
             placeholderTextColor={"#bfbfbf"}
-            // value={itemName} 이거 없애야 한글 분리가 안됨
             onChangeText={setItemName}
             onSubmitEditing={() => {
               Keyboard.dismiss();
@@ -194,7 +192,7 @@ const styles = StyleSheet.create({
     flex: 1.1,
     position: "relative",
   },
-  item: { flex: 1 }, //마진 왔다갔다 거리는 거 방지
+  item: { flex: 1 },
   titleText: {
     fontSize: 30,
     color: "#a4ccff",
@@ -217,8 +215,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   selectResult: {
-    // flexDirection: "row",
-    // justifyContent: "space-between",
     width: "75%",
     height: 450,
     borderWidth: 2,
@@ -229,14 +225,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   selectResultContent: {
-    // width: "120%",
     flex: 1,
-    //backgroundColor: "pink",
   },
   selectResultTitle: {
     width: "90%",
     height: 40,
-    // backgroundColor: "pink",
     borderWidth: 2,
     borderRadius: 10,
     borderColor: "#a4ccff",

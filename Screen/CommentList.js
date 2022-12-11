@@ -158,7 +158,6 @@ const CommentList = ({ route }) => {
       })
       .catch((err) => {
         const errCode = err.toJSON().status;
-        console.log(errCode);
         Alert.alert("ID와 의견 내용을 확인해주세요");
       });
     setComment("");

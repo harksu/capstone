@@ -104,7 +104,7 @@ const SignUp = () => {
                   .catch((err) => {
                     const errCode = err.toJSON().status;
                     if (errCode === 409) Alert.alert("이미 가입된 회원입니다.");
-                    else if (errCode === 404) Alert.alert("잘못된 에러입니다.");
+                    else Alert.alert("형식에 맞게 다시 입력해주세요");
                   });
               }}
             />
@@ -125,8 +125,6 @@ const SignUp = () => {
 
 export default SignUp;
 
-//사실 스타일 컴포넌트 쓰면 스타일 코드가 더 이쁠지도 모르겠다는 생각이 들긴 하는데, 그냥 진행
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     flex: 0.7,
     marginTop: 67,
     marginLeft: 20,
-    marginRight: 20, //리넥 마진 적용 극혐;
+    marginRight: 20,
   },
   titleContainer: { flex: 0.5 },
   passwordContainer: {

@@ -58,7 +58,7 @@ const SignIn = () => {
               style={styles.input}
               onChangeText={(input) => setUserInfo({ ...userInfo, id: input })}
               value={userInfo.id}
-              //autoFocus={true} 이거 나중에 키자 정신 없다.
+              autoFocus={true}
               blurOnSubmit={false}
               onSubmitEditing={() => {
                 pwRef.current.focus();
@@ -74,9 +74,6 @@ const SignIn = () => {
               ref={pwRef}
               secureTextEntry={true}
               blurOnSubmit={false}
-              onSubmitEditing={() => {
-                // pwCheckRef.current.focus(); 이게 왜 있는거지 ?
-              }}
             />
             {pwRegEx.test(userInfo.pw) ? (
               <View style={styles.emptyBlock} />
@@ -116,8 +113,17 @@ const SignIn = () => {
               })
               .catch((err) => {
                 const errCode = err.toJSON().status;
-                if (errCode === 404)
+                if (errCode === 404) {
                   Alert.alert("없는 회원입니다. 회원가입창으로 넘어갑니다.");
+                  navigation.navigate("회원가입", {
+                    screen: "회원가입",
+                  });
+                } else {
+                  Alert.alert("알수 없는 에러입니다 메인페이지로 넘어갑니다.");
+                  navigation.navigate("메인페이지", {
+                    screen: "메인페이지",
+                  });
+                }
               });
           }}
         >
@@ -132,12 +138,12 @@ const SignIn = () => {
 export default SignIn;
 
 const styles = StyleSheet.create({
-  //이거 짜고 밑으로
   loginButton: {
     flex: 0.1,
     width: "90%",
     marginLeft: "auto",
     marginRight: "auto",
+    marginBottom: 20,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -172,7 +178,7 @@ const styles = StyleSheet.create({
     flex: 0.7,
     marginTop: 67,
     marginLeft: 20,
-    marginRight: 20, //리넥 마진 적용 극혐;
+    marginRight: 20,
     marginBottom: 15,
   },
   titleContainer: { flex: 0.5 },
@@ -197,9 +203,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#0974fa",
     opacity: 0.5,
-    // flex: 0.4,
     marginTop: 20,
-    marginBottom: 30, //일단 눈대중이긴 한데 나중에 제대로
+    marginBottom: 30,
     fontFamily: "Tmoney",
   },
   alertText: {

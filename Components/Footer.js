@@ -57,7 +57,7 @@ export default Footer;
 
 const styles = StyleSheet.create({
   footer: {
-    height: 55, // 고정으로 해야 관리가 편함
+    height: 55,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

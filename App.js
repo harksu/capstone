@@ -1,3 +1,4 @@
+import { LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import { RecoilRoot } from "recoil";
@@ -14,6 +15,8 @@ import Select from "./Screen/Select";
 import Result from "./Screen/Result";
 
 axios.defaults.baseURL = "http://misson24.com/";
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 
