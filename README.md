@@ -11,6 +11,22 @@
 
  이러한 문제점을 해결하고자 ‘증상 및 이름에 적합한 약품의 정보와 약들의 상호 작용의 문제 여부를 사용자에게 제공하는 서비스를 만들면 어떨까?’라는 생각으로 선정하였습니다. 
 
+ ## **주요기능**  
+### **메인페이지 라우팅**    
+<img width="80%" src="https://user-images.githubusercontent.com/81761524/207899880-7df408fa-0d19-4bf9-afb7-9971622f8ab5.gif"/>  
+
+### **증상에 따른 약 추천 **     
+<img width="80%" src="https://user-images.githubusercontent.com/81761524/207899822-d61d4391-a7b5-49a8-a8e4-af744a645b17.gif"/>    
+
+### **약명에 따른 약 조회**       
+<img width="80%" src="https://user-images.githubusercontent.com/81761524/207899887-998e8bde-ca36-4cd3-9577-d00f142aec9b.gif"/>  
+
+### **병용금기 조회**     
+<img width="80%" src="https://user-images.githubusercontent.com/81761524/207899841-67e15435-779c-4731-a36b-d7297c34f49b.gif"/>  
+
+### **...etc**     
+<img width="80%" src="https://user-images.githubusercontent.com/81761524/207899830-8d2fe001-4aa8-40cc-9f0a-64d0d6673f81.gif"/>  
+
 <br>
 
 ## How to Start?
